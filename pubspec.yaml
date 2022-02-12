@@ -47,6 +47,8 @@ dependencies:
   intl:
   animations: ^2.0.1
   font_awesome_flutter: ^9.2.0
+  flutter_svg: ^0.22.0
+  lazy_load_scrollview:
 
 
 

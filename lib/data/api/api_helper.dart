@@ -9,6 +9,7 @@ import 'package:biz_app_bloc/model/Login.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/model/User.dart';
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
 
 
@@ -91,6 +92,14 @@ class ApiHelperImpl extends ApiHelper {
         "page": page, "category_ids": categories, "user_id": user_id,"search_txt":search_text
       });
         return Right(NewsCategory.fromJson(response));
+
+
+      if(!response['error']){
+        return Right(NewsCategory.fromJson(response));
+      }else{
+return Left(throw new CustomException(200,response['msg'],"'"));
+      }
+
     } on CustomException catch (e) {
       return Left(e);
     }

@@ -30,7 +30,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
     response.fold((l) async {
       emit(state.copyWith(
         isNewsFailure : true,
-        isErrorMessage : true,
+        isErrorMessage: true,
         errorMessage: l.errorMessage,
         isNewsLoading : false,
       ));

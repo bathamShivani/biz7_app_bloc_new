@@ -69,10 +69,7 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
         value: _bookmarkCubit,
         child: BookmarkPage(),
       ),
-      BlocProvider.value(
-        value: _homePageCubit,
-        child: HomePage(),
-      ),
+      SettingScreen(),
       /*BlocProvider(
         create: (context) => NewsFeedCubit(),
         child: BookmarkPage(),

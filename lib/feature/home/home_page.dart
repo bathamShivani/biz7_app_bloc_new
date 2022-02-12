@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 
 class HomePage extends AppScreen {
@@ -36,7 +37,7 @@ class _HomePageState extends AppScreenState<HomePage> {
   void onInit() {
     _cubit = BlocProvider.of<HomePageCubit>(context)
       ..fetchMyCategories()
-      ..fetchnews();
+      ..fetchnews(0);
 
    // _scrollController.addListener(_onListScrolled);
     super.onInit();
@@ -126,12 +127,14 @@ class _HomePageState extends AppScreenState<HomePage> {
                          /// controller: _searchController,
                           onSubmitted: (value){
                             print(value);
-
+                            _cubit.fetchnews(0,
+                                catID: state.selectedCatId,searchText:value);
                             //search();
                           },
                           onChanged: (value){
                             if(value==''){
-                              //search();
+                              _cubit.fetchnews(0,
+                                  catID: state.selectedCatId,searchText:value);
                             }
                           },
                         ),
@@ -168,18 +171,17 @@ class _HomePageState extends AppScreenState<HomePage> {
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                               /* homeController.cat.value = c;
-                                                print(c);
-                                                homeController.getNews(
-                                                    c.catId, 0, null);*/
+
+                                                _cubit.fetchnews(0,
+                                                    catID: cat.catId);
                                               },
                                               child: Container(
                                                   decoration: BoxDecoration(
                                                     border: Border.all(
                                                         width: 1.0,
-                                                        color: /*(selected.catId == c.catId)
+                                                        color: (state.selectedCatId == cat.catId)
                                                             ? AppColors.red
-                                                            : */
+                                                            :
                                                         AppColors.backColor),
                                                     color: AppColors.backColor,
                                                     borderRadius:
@@ -234,14 +236,25 @@ class _HomePageState extends AppScreenState<HomePage> {
                                 ),
                               ),
                              // if (state.news.isNotEmpty)
-                              Expanded(
+                              state.news.isNotEmpty? Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
 
-                                      child: ListView.builder(
+                                      child:LazyLoadScrollView(
+                                          onEndOfPage: () => {
+                                            if(state.isReloading)
+                                              _cubit.fetchnews(state.page+1),
+                                            print(
+                                                "sdsvvsvdsv>>>>>>>>>  ffff>>>>>>>>>>>>>>>>>>>>>>>...@@@@@@@****************"+state.page.toString())
+
+
+                                          },
+
+                                    child:  ListView.builder(
                                           shrinkWrap: true,
                                           //controller: ,
                                           itemCount: state.news.length,
+
                                           itemBuilder: (context, index) {
                                             Datum news = state.news[index];
                                             return InkWell(
@@ -391,8 +404,16 @@ class _HomePageState extends AppScreenState<HomePage> {
                                             //         ),
                                             //       )),
                                             // );
-                                          })
+                                          }))
                                   //),
+                                ),
+                              ):Expanded(
+                                child: Center(
+                                  child: new Text(state.errorMessage,
+
+                                      style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                                        fontWeight: FontWeight.w600,color: AppColors.red,
+                                      )),
                                 ),
                               )
                             ]),

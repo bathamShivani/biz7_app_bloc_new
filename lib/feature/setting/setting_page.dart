@@ -1,4 +1,8 @@
 import 'dart:ui';
+import 'package:biz_app_bloc/core/app_screen.dart';
+import 'package:biz_app_bloc/core/bundle.dart';
+import 'package:biz_app_bloc/core/routes.dart';
+import 'package:biz_app_bloc/data/data_helper.dart';
 import 'package:biz_app_bloc/utility/adaptive.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/shadows.dart';
@@ -38,20 +42,23 @@ List<SettingItem> settingItems = [
   )
 ];
 
-class SettingScreen extends StatefulWidget {
-  SettingScreen({Key? key}) : super(key: key);
+class SettingScreen extends AppScreen {
+  SettingScreen(
+      {RouteObserver<Route>? routeObserver, Key? key, Bundle? arguments})
+      : super(routeObserver, key, arguments);
 
   @override
   _SettingScreenState createState() => _SettingScreenState();
 }
 
-class _SettingScreenState extends State<SettingScreen> {
+class _SettingScreenState extends AppScreenState<SettingScreen> {
   // ProfileBloc _profileBloc;
   // DrawerBloc _drawerBloc;
   // FamilyMember member;
   // User user;
   var isLoading = true;
   var scaffoldKey = GlobalKey<ScaffoldState>();
+  final DataHelper _dataHelper = DataHelperImpl.instance;
 
   @override
   void initState() {
@@ -123,11 +130,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       return InkWell(
                         onTap: () => {
                           if (index == 0)
-                           // {Get.to(EditProfilePage())}
-                          /*else if(index==1){
-                            Get.to(FaqPage())
-                          }*/
-                         // else
+                           {
+
+                           }
+                          else
                             {_onLogout()}
                         },
                         child: Padding(
@@ -174,9 +180,100 @@ class _SettingScreenState extends State<SettingScreen> {
   }
 
   Future<void> _onLogout() async {
-    //await SharedPreferenceHelper.setUserPref(null);
+    await _dataHelper.cacheHelper.saveUserInfo('');
+    navigateToScreenAndReplace(Screen.login);
 
-   // Get.to(LoginPage());
+  }
+
+  @override
+  Widget setView() {
+    ThemeData theme = Theme.of(context);
+    double widthOfScreen = assignWidth(context: context, fraction: 1.0);
+    double heightOfScreen = assignHeight(context: context, fraction: 1.0);
+    return Scaffold(
+        key: scaffoldKey,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(Sizes.HEIGHT_56),
+          child: CustomAppBar(
+            title: StringConst.SETTING_SCREEN.toUpperCase(),
+            hasLeading: false,
+            hasTrailing: false,
+          ),
+        ),
+        body: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            BgCard(
+              padding: const EdgeInsets.symmetric(
+                horizontal: Sizes.PADDING_8,
+                vertical: Sizes.PADDING_8,
+              ),
+              borderColor: Colors.white,
+              width: widthOfScreen,
+              height: heightOfScreen * 0.7,
+              borderRadius: const BorderRadius.all(
+                const Radius.circular(Sizes.RADIUS_10),
+              ),
+              child: Column(
+                children: [
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: settingItems.length,
+                    itemBuilder: (context, index) {
+                      SettingItem item = settingItems[index];
+                      return InkWell(
+                        onTap: () => {
+                          if (index == 0)
+                            {
+
+                            }
+                          else
+                            {_onLogout()}
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 10.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Padding(
+                                  padding: const EdgeInsets.only(
+                                    top: Sizes.PADDING_4,
+                                    left: Sizes.PADDING_4,
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: Sizes.PADDING_10),
+                                    title: new Text(item.title,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1!
+                                            .copyWith(
+                                            color: AppColors.primaryText,
+                                            fontWeight: FontWeight.w800)),
+                                    trailing: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: Sizes.ICON_SIZE_16,
+                                      color: AppColors.secodaryText,
+                                    ),
+                                  )),
+                              DividerGrey()
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                  SpaceH16()
+                ],
+              ),
+            ),
+          ],
+        ));
+    throw UnimplementedError();
   }
 }
 
