@@ -46,7 +46,7 @@ dependencies:
   pin_code_fields: ^7.3.0
   intl:
   animations: ^2.0.1
-  flutter_svg: ^0.22.0
+  font_awesome_flutter: ^9.2.0
 
 
 

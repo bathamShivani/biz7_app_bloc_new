@@ -1,3 +1,4 @@
+import 'package:biz_app_bloc/feature/bookmark/cubit/bookmark_cubit.dart';
 import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
 import 'package:biz_app_bloc/feature/home_navigation/home.dart';
 import 'package:biz_app_bloc/feature/login/bloc/login_bloc.dart';
@@ -17,6 +18,7 @@ enum Screen {
 
 class Router {
   final _categoryCubit = HomePageCubit();
+  final _bookmarkCubit = BookmarkCubit();
 
   Route<dynamic> generateRoute(RouteSettings settings)  {
     var screen = Screen.values.firstWhere((e) => e.toString() == settings.name);
@@ -50,6 +52,9 @@ class Router {
                   providers: [
                     BlocProvider.value(
                       value: _categoryCubit,
+                    ),
+                    BlocProvider.value(
+                      value: _bookmarkCubit,
                     ),
 
                     BlocProvider(create: (context) => HomeNavigationCubit())

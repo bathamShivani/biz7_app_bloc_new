@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:biz_app_bloc/core/exceptions/custom_exception.dart';
 import 'package:biz_app_bloc/data/api/api_client.dart';
 import 'package:biz_app_bloc/data/data_helper.dart';
@@ -22,6 +24,7 @@ class ApiEndPoints {
   static final String otpUrl = 'api-authenticate';
   static final String categoryUrl = 'api-category';
   static final String newsUrl = 'api-news';
+  static final String bokmarkUrl = 'api-get-bookmark-news';
 
 }
 
@@ -29,7 +32,8 @@ abstract class ApiHelper {
   Future<Either<CustomException, Login>> executeLogin(String mobile);
   Future<Either<CustomException, User>> executeVerifyOtp(String mobile, String otp);
   Future<Either<CustomException, Category>> executeCategory();
-  Future<Either<CustomException, NewsCategory>> executeNews(int page, List<int> categories,String search_text);
+  Future<Either<CustomException, NewsCategory>> executeNews(int page, List<int> categories,int user_id,String search_text);
+  Future<Either<CustomException, NewsCategory>> executeBookmark(int page, List<int> categories,int user_id);
 }
 
 class ApiHelperImpl extends ApiHelper {
@@ -79,14 +83,31 @@ class ApiHelperImpl extends ApiHelper {
     }
   }
   @override
-  Future<Either<CustomException, NewsCategory>> executeNews(page, List<int> categories,String search_text) async {
+  Future<Either<CustomException, NewsCategory>> executeNews(page, List<int> categories,user_id,String search_text) async {
     //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     try {
       final response =
       await _api.post( ApiEndPoints.newsUrl, {
-        "page": page, "category_ids": categories, "user_id": 1,"search_txt":search_text
+        "page": page, "category_ids": categories, "user_id": user_id,"search_txt":search_text
       });
+        return Right(NewsCategory.fromJson(response));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, NewsCategory>> executeBookmark(page, List<int> categories,user_id) async {
+    //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    try {
+      final response =
+      await _api.post( ApiEndPoints.bokmarkUrl, {
+        "page": page, "category_ids": categories, "user_id": user_id
+      });
+      if(response["error"]==false) {
       return Right(NewsCategory.fromJson(response));
+      }
+      return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {
       return Left(e);
     }

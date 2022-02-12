@@ -3,7 +3,7 @@ import 'package:biz_app_bloc/utility/images.dart';
 import 'package:biz_app_bloc/utility/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomAppBar extends StatelessWidget {
   CustomAppBar({
@@ -59,9 +59,9 @@ class CustomAppBar extends StatelessWidget {
         onTap: onActionTap,
         child: Padding(
           padding: const EdgeInsets.only(right: Sizes.PADDING_16),
-          child: SvgPicture.asset(
-            ImagePath.BELL,
-            color: trailingColor,
+          child: FaIcon(
+            FontAwesomeIcons.bell,
+            color: Colors.black,
           ),
         ),
       )
@@ -77,8 +77,8 @@ class CustomAppBar extends StatelessWidget {
             alignment: Alignment.center,
             height: Sizes.ICON_SIZE_32,
             width: Sizes.ICON_SIZE_32,
-            child: SvgPicture.asset(
-              ImagePath.MENU,
+            child: FaIcon(
+              FontAwesomeIcons.medium,
               color: leadingColor,
             ),
           )),
