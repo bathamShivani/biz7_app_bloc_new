@@ -7,6 +7,7 @@ import 'package:biz_app_bloc/model/Login.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/model/User.dart';
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 
 
 
@@ -47,6 +48,7 @@ class ApiHelperImpl extends ApiHelper {
         'let': "11.222",
         'lng': "11.333"
       });
+
       return Right(Login.fromJson(response));
     } on CustomException catch (e) {
       return Left(e);
@@ -86,10 +88,29 @@ class ApiHelperImpl extends ApiHelper {
       await _api.post( ApiEndPoints.newsUrl, {
         "page": page, "category_ids": categories, "user_id": 1,"search_txt":search_text
       });
-      return Right(NewsCategory.fromJson(response));
+
+
+      if(!response['error']){
+        return Right(NewsCategory.fromJson(response));
+      }else{
+return Left(throw new CustomException(200,response['msg'],"'"));
+      }
+
     } on CustomException catch (e) {
       return Left(e);
     }
   }
 
 }
+
+class AppError extends Equatable {
+  final AppErrorType appErrorType;
+   String message="";
+
+   AppError(this.appErrorType, {this.message=""});
+
+  @override
+  List<Object> get props => [appErrorType, message];
+}
+
+enum AppErrorType { api, network, database, message }
