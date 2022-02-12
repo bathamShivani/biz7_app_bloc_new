@@ -45,6 +45,7 @@ class _AppLandingState extends State<AppLanding> {
           //ResponsiveUtil().init(constraints, orientation);
          // AppTheme.setStatusBarAndNavigationBarColors(ThemeMode.system);
           return MaterialApp(
+            debugShowCheckedModeBanner: false,
             title: StringConst.APP_NAME,
             theme: ThemeData.light(),
             onGenerateRoute: _routes.generateRoute,
