@@ -109,7 +109,7 @@ class HomePageCubit extends Cubit<HomePageState> {
         }else if(state.news!=null &&state.news.length!=0&&page!=0){
           List<Datum> news=  state.news;
 
-          news?.addAll(r.data!);
+          news.addAll(r.data);
           emit(
             state.copyWith(
                 news:  news,

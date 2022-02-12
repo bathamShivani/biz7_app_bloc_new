@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
+import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/data/api/api_helper.dart';
 import 'package:biz_app_bloc/feature/home/cubit/home_page_cubit.dart';
 import 'package:biz_app_bloc/model/Category.dart';
@@ -165,8 +166,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                                         itemCount: state.category.length,
                                         itemBuilder: (context, index) {
                                           final cat = state.category.elementAt(index);
-                                          //Data c = state.category.elementAt(index) ;
-                                          //Data selected = state.category.cat.value;
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
@@ -181,8 +180,7 @@ class _HomePageState extends AppScreenState<HomePage> {
                                                         width: 1.0,
                                                         color: (state.selectedCatId == cat.catId)
                                                             ? AppColors.red
-                                                            :
-                                                        AppColors.backColor),
+                                                            : AppColors.backColor),
                                                     color: AppColors.backColor,
                                                     borderRadius:
                                                     BorderRadius.all(Radius.circular(40)),
@@ -226,38 +224,36 @@ class _HomePageState extends AppScreenState<HomePage> {
                                             fontWeight: FontWeight.w600,
                                           )),
                                     ),
-                                    /*SvgPicture.asset(
-                        ImagePath.GRIDVIEW,
-                        height: 30,
-                      ),
-                      SpaceW12(),
-                      SvgPicture.asset(ImagePath.LISTVIEW, height: 30)*/
+
                                   ],
                                 ),
                               ),
-                             // if (state.news.isNotEmpty)
                               state.news.isNotEmpty? Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
-
                                       child:LazyLoadScrollView(
                                           onEndOfPage: () => {
                                             if(state.isReloading)
                                               _cubit.fetchnews(state.page+1),
                                             print(
                                                 "sdsvvsvdsv>>>>>>>>>  ffff>>>>>>>>>>>>>>>>>>>>>>>...@@@@@@@****************"+state.page.toString())
-
-
                                           },
 
                                     child:  ListView.builder(
                                           shrinkWrap: true,
-                                          //controller: ,
                                           itemCount: state.news.length,
-
                                           itemBuilder: (context, index) {
                                             Datum news = state.news[index];
                                             return InkWell(
+                                              onTap: () {
+
+                                                final _bundle = Bundle()
+                                                ..put('news', state.news)
+                                                ..put('index', index);
+                                                navigateToScreen(
+                                                    Screen.detail,
+                                                    _bundle);
+                                              },
                                               /*onTap: () => Get.to(() => DetailPage(
                                                   news: homeController.news,
                                                   index: index)).then(onGoBack),*/

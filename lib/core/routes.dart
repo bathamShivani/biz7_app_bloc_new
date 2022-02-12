@@ -1,4 +1,8 @@
 import 'package:biz_app_bloc/feature/bookmark/cubit/bookmark_cubit.dart';
+import 'package:biz_app_bloc/feature/home/detail/cubit/detail_cubit.dart';
+import 'package:biz_app_bloc/feature/home/detail/detailpage.dart';
+import 'package:biz_app_bloc/feature/home/pdfviewer.dart';
+import 'package:biz_app_bloc/feature/home/web_view.dart';
 import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
 import 'package:biz_app_bloc/feature/home_navigation/home.dart';
 import 'package:biz_app_bloc/feature/login/bloc/login_bloc.dart';
@@ -13,7 +17,10 @@ import 'package:biz_app_bloc/feature/home/cubit/home_page_cubit.dart';
 enum Screen {
   splash,
   login,
-  home
+  home,
+  detail,
+  pdfview,
+  webview
 }
 
 class Router {
@@ -60,6 +67,39 @@ class Router {
                     BlocProvider(create: (context) => HomeNavigationCubit())
                   ],
                   child: HomeNavigationScreen(
+                      arguments: settings.arguments != null
+                          ? settings.arguments as Bundle
+                          : null),
+                ));
+
+      case Screen.detail:
+        return MaterialPageRoute(
+            builder: (_) =>
+                BlocProvider(
+                  create: (context) => DetailCubit(),
+                  child: DetailPage(
+                      arguments: settings.arguments != null
+                          ? settings.arguments as Bundle
+                          : null),
+                ));
+
+      case Screen.pdfview:
+        return MaterialPageRoute(
+            builder: (_) =>
+                BlocProvider(
+                  create: (context) => LoginBloc(),
+                  child: PdfViewer(
+                      arguments: settings.arguments != null
+                          ? settings.arguments as Bundle
+                          : null),
+                ));
+
+      case Screen.webview:
+        return MaterialPageRoute(
+            builder: (_) =>
+                BlocProvider(
+                  create: (context) => LoginBloc(),
+                  child: WebViewPage(
                       arguments: settings.arguments != null
                           ? settings.arguments as Bundle
                           : null),

@@ -176,7 +176,6 @@ class LoginPageState extends AppScreenState<LoginPage> {
                         title: state.isPartial!
                             ? CommonButtons.Sign_in
                             : CommonButtons.Send_OTP,
-                        //isLoading: (state.Loading),
                         onPressed: () {
                          state.isPartial!
                               ? sigInWithOtp()

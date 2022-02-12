@@ -25,7 +25,8 @@ class ApiEndPoints {
   static final String otpUrl = 'api-authenticate';
   static final String categoryUrl = 'api-category';
   static final String newsUrl = 'api-news';
-  static final String bokmarkUrl = 'api-get-bookmark-news';
+  static final String bookmarkUrl = 'api-get-bookmark-news';
+  static final String updatebookmarkUrl = 'api-bookmark-news';
 
 }
 
@@ -35,6 +36,8 @@ abstract class ApiHelper {
   Future<Either<CustomException, Category>> executeCategory();
   Future<Either<CustomException, NewsCategory>> executeNews(int page, List<int> categories,int user_id,String search_text);
   Future<Either<CustomException, NewsCategory>> executeBookmark(int page, List<int> categories,int user_id);
+  Future<Either<CustomException, String>> updateBookmark(int news_id, int is_bookmark,int user_id);
+
 }
 
 class ApiHelperImpl extends ApiHelper {
@@ -110,12 +113,30 @@ return Left(throw new CustomException(200,response['msg'],"'"));
     //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     try {
       final response =
-      await _api.post( ApiEndPoints.bokmarkUrl, {
+      await _api.post( ApiEndPoints.bookmarkUrl, {
         "page": page, "category_ids": categories, "user_id": user_id
       });
       if(response["error"]==false) {
       return Right(NewsCategory.fromJson(response));
       }
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, String>> updateBookmark(news_id, isbookmark,user_id) async {
+
+    //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    try {
+      final response =
+      await _api.post( ApiEndPoints.updatebookmarkUrl, {
+        "news_id":news_id,
+        "is_bookmark":isbookmark, "user_id": user_id
+      });
+      if(response["error"]==false){
+      return Right(response["msg"]);}
       return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {
       return Left(e);
