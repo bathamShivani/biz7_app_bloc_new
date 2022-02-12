@@ -12,6 +12,7 @@ class LoginState extends Equatable {
     this.errorMessage,
     this.isEmail = false,
     this.isMobile = false,
+    this.isOtp = false,
     this.isUsernameReadOnly = false,
     this.isOtpValid,
   });
@@ -97,6 +98,7 @@ class LoginState extends Equatable {
   final String? errorMessage;
   final bool isMobile;
   final bool isEmail;
+  final bool isOtp;
   final bool isUsernameReadOnly;
 
   bool get isUsernameValid => isEmailValid!;

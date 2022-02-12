@@ -1,6 +1,7 @@
 
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
+import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/form_validator.dart';
 import 'package:biz_app_bloc/utility/sizes.dart';
@@ -65,6 +66,13 @@ class LoginPageState extends AppScreenState<LoginPage> {
       ),
     );
   }
+  void sigInWithOtp() {
+    _loginBloc.add(
+      LoginWithCredentialsOtp(
+        _mobileController.text,_otpController.text
+      ),
+    );
+  }
   @override
   Widget setView() {
     return Container(
@@ -78,7 +86,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
             listener: (context, state) {
               if (state.isSuccess!) {
                 print('true');
-                //navigateToScreenAndReplace(Screen.homeNavigation);
+                navigateToScreenAndReplace(Screen.home);
               }
               if (state.isFailure!) {
                 ScaffoldMessenger.of(globalKey.currentContext!).showSnackBar(
@@ -110,7 +118,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
                     ),
                     UsernameEditText(
                       _mobileController,
-                      isValid: state.isEmailValid!,
+                      isValid: state.isEmailValid,
                       usernameType: UsernameType.mobile,
                     ),
                     if (state.isPartial!)
@@ -170,11 +178,9 @@ class LoginPageState extends AppScreenState<LoginPage> {
                             : CommonButtons.Send_OTP,
                         //isLoading: (state.Loading),
                         onPressed: () {
-                          _onLoginPressed();
                          state.isPartial!
                               ? sigInWithOtp()
                               : _onLoginPressed();
-
                         }, backgroundColor: Colors.red,),
                     SpaceH4(),
                     if (state.isFailure!)

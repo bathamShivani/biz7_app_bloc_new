@@ -1,36 +1,23 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:biz_app_bloc/app/app.dart';
 import 'package:biz_app_bloc/feature/login/login_page.dart';
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
+import 'app/app_bloc_observer.dart';
 import 'data/data_helper.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = AppBlocObserver();
+  FlutterError.onError = (details) {
+    log(details.exceptionAsString(), stackTrace: details.stack);
+  };
+
+  runZonedGuarded(
+        () => runApp(App(appBloc: DataHelperImpl.instance.appBloc)),
+        (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
+  );
 }
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home:  App(appBloc: DataHelperImpl.instance.appBloc,),
-    );
-  }
-}
-
-

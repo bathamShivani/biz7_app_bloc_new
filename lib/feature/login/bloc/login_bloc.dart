@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/model/Login.dart';
+import 'package:biz_app_bloc/model/User.dart';
 import 'package:biz_app_bloc/utility/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -33,51 +35,57 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     //if (event is ResendOtpClicked) yield* _resendOtp(event);
 
     if (event is LoginWithCredentialsClicked) {
-      if ( !state.isMobile) {
+      if (!state.isMobile) {
         if (Validators.isValidMobile(event.mobile)) {
           yield state.copyWith(
-              isEmail: false, isMobile: true, isUsernameReadOnly: true);
-        } else {
-         // yield* _sendOtp(event);
+               isMobile: true, );
         }
       } else {
         if (state.isMobile)
           yield* _loginWithCredentials(event);
-        else
-          yield* _loginWithOtp(event);
       }
+    } else
+      UnimplementedError();
+
+    if (event is LoginWithCredentialsOtp) {
+
+          yield* _loginWithOtp(event);
+
     } else
       UnimplementedError();
   }
 
   Stream<LoginState> _loginWithCredentials(
       LoginWithCredentialsClicked event) async* {
+    print('mobile');
     yield LoginState.loading();
     final response = await _dataHelper.apiHelper.executeLogin(
         event.mobile);
     yield* response.fold((l) async* {
       yield LoginState.failure(l.errorMessage);
     },  (r) async* {
-        yield LoginState.partial();
+      await _dataHelper.cacheHelper.saveUserInfo(r.data.id.toString());
+
+      yield LoginState.partial();
       });
 
   }
-  Stream<LoginState> _loginWithOtp(LoginWithCredentialsClicked event) async* {
+
+  Stream<LoginState> _loginWithOtp(LoginWithCredentialsOtp event) async* {
     yield LoginState.loading();
+    print('otp');
+
+    final id = await DataHelperImpl.instance.cacheHelper.getUserInfo();
+
     final response =
-    await _dataHelper.apiHelper.executeVerifyOtp(event.email, event.otp);
+    await _dataHelper.apiHelper.executeVerifyOtp(id, event.otp);
     yield* response.fold((l) async* {
       yield LoginState.failure(l.errorMessage);
     }, (r) async* {
-      await _dataHelper.cacheHelper.saveAccessToken(r.accessToken!);
-      final userResponse = await _dataHelper.apiHelper.executeUserDetails();
-      yield* userResponse.fold((l) async* {
-        yield LoginState.failure(l.errorMessage);
-      }, (r) async* {
-        await _dataHelper.cacheHelper.saveUserInfo(userToMap(r));
+        await _dataHelper.cacheHelper.saveUserInfo(userToJson(r));
         yield LoginState.success();
       });
-    });
+   // });
   }
 
 
