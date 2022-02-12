@@ -35,7 +35,6 @@ abstract class ApiHelper {
 class ApiHelperImpl extends ApiHelper {
   ApiHelperImpl(this._api);
   final ApiClient _api;
-  final DataHelper _dataHelper = DataHelperImpl.instance;
 
   @override
   Future<Either<CustomException, Login>> executeLogin(String mobile) async {

@@ -9,7 +9,7 @@ class HomePageState extends Equatable {
   final bool isCategoryLoading;
 
   //news
-  final List<News> news;
+  final List<Datum> news;
   final bool isNewsFailure;
   final bool isNewsLoading;
 
@@ -42,7 +42,7 @@ class HomePageState extends Equatable {
         bool? isCategoryFailure,
         bool? isCategoryLoading,
 
-        List<News>? news,
+        List<Datum>? news,
         bool? isNewsLoading,
         bool? isNewsFailure,
        }) {

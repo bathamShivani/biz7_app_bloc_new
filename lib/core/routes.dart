@@ -48,7 +48,6 @@ class Router {
             builder: (_) =>
                 MultiBlocProvider(
                   providers: [
-
                     BlocProvider.value(
                       value: _categoryCubit,
                     ),

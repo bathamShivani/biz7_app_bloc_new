@@ -11,12 +11,12 @@ class HomePageCubit extends Cubit<HomePageState> {
       : super(
     HomePageState(
         category: <Data>[],
-        news: <News>[],
+        news: <Datum>[],
     )
   );
   final DataHelper _dataHelper = DataHelperImpl.instance;
   List<Data>? list = List.empty(growable: true);
-  List<News>? newslist = List.empty(growable: true);
+  List<Datum>? newslist = List.empty(growable: true);
 
   Category? _category;
   NewsCategory? _newscategory;
@@ -66,7 +66,7 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   Future<void> fetchnews() async {
     emit(state.copyWith(isNewsLoading: true));
-    final response = await _dataHelper.apiHelper.executeNews(0, [state.category[0].catId], '');
+    final response = await _dataHelper.apiHelper.executeNews(0, [1], '');
 
     response.fold((l) async {
       emit(state.copyWith(
