@@ -20,8 +20,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(
     LoginEvent event,
   ) async* {
-    if (event is EmailChanged)
-      yield state.update(isEmailValid: Validators.isValidUsername(event.email));
+    if (event is EmailChanged){
+      if (Validators.isValidMobile(event.mobile)) {
+        yield state.copyWith(
+          isMobile: true, );
+      }
+    }
 
     if (event is PasswordChanged)
       yield state.update(
@@ -41,6 +45,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
                isMobile: true, );
         }
       } else {
+
         if (state.isMobile)
           yield* _loginWithCredentials(event);
       }
@@ -58,13 +63,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _loginWithCredentials(
       LoginWithCredentialsClicked event) async* {
     print('mobile');
-    yield LoginState.loading();
+    yield LoginState.loading(false);
     final response = await _dataHelper.apiHelper.executeLogin(
         event.mobile);
     yield* response.fold((l) async* {
-      yield LoginState.failure(l.errorMessage);
+      yield LoginState.failure(l.errorMessage,false);
     },  (r) async* {
-      await _dataHelper.cacheHelper.saveUserInfo(r.data.id.toString());
+      await _dataHelper.cacheHelper.saveAccessToken(r.data.id.toString());
 
       yield LoginState.partial();
       });
@@ -72,18 +77,18 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _loginWithOtp(LoginWithCredentialsOtp event) async* {
-    yield LoginState.loading();
+    yield LoginState.loading(true);
     print('otp');
 
-    final id = await DataHelperImpl.instance.cacheHelper.getUserInfo();
+    final id = await DataHelperImpl.instance.cacheHelper.getAccessToken();
 
     final response =
     await _dataHelper.apiHelper.executeVerifyOtp(id, event.otp);
     yield* response.fold((l) async* {
-      yield LoginState.failure(l.errorMessage);
+      yield LoginState.failure(l.errorMessage,true);
     }, (r) async* {
         await _dataHelper.cacheHelper.saveUserInfo(userToJson(r));
-        yield LoginState.success();
+        yield LoginState.success(true);
       });
    // });
   }

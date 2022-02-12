@@ -29,7 +29,7 @@ class LoginState extends Equatable {
         isMobile: false,
         errorMessage: '');
   }
-  factory LoginState.loading() {
+  factory LoginState.loading(bool isPartial) {
     return LoginState(
         isEmailValid: true,
         isPasswordValid: true,
@@ -37,10 +37,10 @@ class LoginState extends Equatable {
         isSubmitting: true,
         isSuccess: false,
         isFailure: false,
-        isPartial: false,
+        isPartial: isPartial,
         errorMessage: '');
   }
-  factory LoginState.failure(String errorMessage) {
+  factory LoginState.failure(String errorMessage,bool isPartial) {
     return LoginState(
       isEmailValid: true,
       isPasswordValid: false,
@@ -48,7 +48,7 @@ class LoginState extends Equatable {
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
-      isPartial: false,
+      isPartial: isPartial,
       errorMessage: errorMessage,
     );
   }
@@ -66,7 +66,7 @@ class LoginState extends Equatable {
     );
   }
 
-  factory LoginState.success() {
+  factory LoginState.success(bool isPartial) {
     return LoginState(
         isEmailValid: true,
         isPasswordValid: true,
@@ -105,7 +105,7 @@ class LoginState extends Equatable {
   bool get isFormValid => (isEmailValid! && isPasswordValid! || isOtpValid!);
 
   LoginState update({
-    bool? isEmailValid,
+    bool? isMobile,
     bool? isPasswordValid,
     bool? isOtpValid,
   }) {

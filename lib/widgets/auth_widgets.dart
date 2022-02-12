@@ -27,6 +27,7 @@ class UsernameEditText extends StatelessWidget {
 
         controller: editTextController,
         autocorrect: false,
+        keyboardType:TextInputType.number,
         style: textTheme.bodyText2,
         readOnly: isReadOnly ?? false,
         // autofillHints: [AutofillHints.email],

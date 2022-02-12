@@ -52,7 +52,14 @@ class ApiHelperImpl extends ApiHelper {
         'let': "11.222",
         'lng': "11.333"
       });
-      return Right(Login.fromJson(response));
+
+
+      if(!response['error']){
+        return Right(Login.fromJson(response));
+      }else{
+        return Left(throw new CustomException(200,response['msg'],"'"));
+      }
+
     } on CustomException catch (e) {
       return Left(e);
     }
@@ -67,7 +74,13 @@ class ApiHelperImpl extends ApiHelper {
         "id":id,
         "otp":otp
       });
-      return Right(User.fromJson(response));
+
+      if(!response['error']){
+        return Right(User.fromJson(response));
+      }else{
+        return Left(throw new CustomException(200,response['msg'],"'"));
+      }
+
     } on CustomException catch (e) {
       return Left(e);
     }
@@ -91,7 +104,7 @@ class ApiHelperImpl extends ApiHelper {
       await _api.post( ApiEndPoints.newsUrl, {
         "page": page, "category_ids": categories, "user_id": user_id,"search_txt":search_text
       });
-        return Right(NewsCategory.fromJson(response));
+
 
 
       if(!response['error']){

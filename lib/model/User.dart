@@ -60,8 +60,8 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     id: json["id"],
-    firstName: json["first_name"],
-    lastName: json["last_name"],
+    firstName: json["first_name"]==null?'':json["first_name"],
+    lastName: json["last_name"]==null?'':json["last_name"],
     dob: json["dob"],
     gender: json["gender"],
     email: json["email"],

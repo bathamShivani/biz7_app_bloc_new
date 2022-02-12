@@ -53,6 +53,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
 
 
   void _onEmailChanged() {
+    print("dddd"+_mobileController.text);
     _loginBloc.add(EmailChanged(_mobileController.text));
   }
 
@@ -60,6 +61,9 @@ class LoginPageState extends AppScreenState<LoginPage> {
     _loginBloc.add(OtpChanged(_otpController.text));
   }
   void _onLoginPressed() {
+
+
+    print("dddd");
     _loginBloc.add(
       LoginWithCredentialsClicked(
         _mobileController.text
@@ -118,7 +122,8 @@ class LoginPageState extends AppScreenState<LoginPage> {
                     ),
                     UsernameEditText(
                       _mobileController,
-                      isValid: state.isEmailValid,
+                      isValid:state.isPartial!||state.isSubmitting
+                      !?true: state.isMobile,
                       usernameType: UsernameType.mobile,
                     ),
                     if (state.isPartial!)
@@ -176,7 +181,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
                         title: state.isPartial!
                             ? CommonButtons.Sign_in
                             : CommonButtons.Send_OTP,
-                        //isLoading: (state.Loading),
+                        isLoading: state.isSubmitting!?true:false,
                         onPressed: () {
                          state.isPartial!
                               ? sigInWithOtp()
