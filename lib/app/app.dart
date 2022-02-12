@@ -48,7 +48,7 @@ class _AppLandingState extends State<AppLanding> {
             title: StringConst.APP_NAME,
             theme: ThemeData.light(),
             onGenerateRoute: _routes.generateRoute,
-            initialRoute: Screen.home.toString(),
+            initialRoute: Screen.splash.toString(),
           );
 
         },

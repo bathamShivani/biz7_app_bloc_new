@@ -25,17 +25,12 @@ class BookmarkCubit extends Cubit<BookmarkState> {
 
     emit(state.copyWith(isNewsLoading : true));
     final response = await _dataHelper.apiHelper.executeBookmark(0, [1],result.data.id);
-    if(response==null)
-      emit(state.copyWith(
-          news: newslist,
-          isNewsLoading : false,
-          isErrorMessage : true,
-          errorMessage: 'r.msg'
-      ));
+
 
     response.fold((l) async {
       emit(state.copyWith(
         isNewsFailure : true,
+        isErrorMessage : true,
         errorMessage: l.errorMessage,
         isNewsLoading : false,
       ));

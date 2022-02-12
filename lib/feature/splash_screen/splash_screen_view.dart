@@ -44,7 +44,7 @@ class _SplashScreenState extends AppScreenState<SplashScreen>
         if (state is LoggedInState)
           Future.delayed(const Duration(seconds: 5), () {
             state.isLoggedIn
-                ? navigateToScreenAndReplace(Screen.login)
+                ? navigateToScreenAndReplace(Screen.home)
                 : navigateToScreenAndReplace(Screen.login);
           });
       },
