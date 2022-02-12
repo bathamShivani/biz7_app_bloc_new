@@ -11,7 +11,7 @@ import 'package:biz_app_bloc/utility/sizes.dart';
 import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
@@ -72,7 +72,8 @@ class _HomePageState extends AppScreenState<HomePage> {
             ),
             actions: <Widget>[
               IconButton(
-                icon: SvgPicture.asset(ImagePath.BELL, height: Sizes.ICON_SIZE_30),
+                icon: FaIcon(FontAwesomeIcons.bell,
+                color: Colors.black,),
                 onPressed: () {
                   // showSearch(context: context, delegate: SearchNewsPage());
                 },
@@ -108,11 +109,11 @@ class _HomePageState extends AppScreenState<HomePage> {
                               },
                               child: new Container(
                                 height: 20,
-                                child: SvgPicture.asset(
-                                  ImagePath.SEARCH,
-                                  height: 20,
+                                child: FaIcon(
+                                  FontAwesomeIcons.search,
+                                  /*height: 20,
                                   width: 20,
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.contain,*/
                                   color: AppColors.grey,
                                 ),
                               ),
@@ -164,8 +165,8 @@ class _HomePageState extends AppScreenState<HomePage> {
                                         itemCount: state.category.length,
                                         itemBuilder: (context, index) {
                                           final cat = state.category.elementAt(index);
-                                         // Category c = state.category.elementAt(index) as Category;
-                                         // Category selected = homeController.cat.value;
+                                          //Data c = state.category.elementAt(index) ;
+                                          //Data selected = state.category.cat.value;
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(

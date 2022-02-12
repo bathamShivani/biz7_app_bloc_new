@@ -1,6 +1,7 @@
 import 'package:biz_app_bloc/data/data_helper.dart';
 import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/News.dart';
+import 'package:biz_app_bloc/model/User.dart' as info;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -65,9 +66,11 @@ class HomePageCubit extends Cubit<HomePageState> {
   }
 
   Future<void> fetchnews(int page, {int catID=1 ,String searchText=""}) async {
+
+    final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     emit(state.copyWith(isNewsLoading: true));
-    final response = await _dataHelper.apiHelper.executeNews(
-        page, [catID], searchText);
+
+    final response = await _dataHelper.apiHelper.executeNews(  page, [catID],result.data.id, searchText);
 
     response.fold((l) async {
       emit(state.copyWith(
