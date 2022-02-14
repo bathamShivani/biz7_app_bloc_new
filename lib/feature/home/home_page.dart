@@ -414,15 +414,14 @@ class _HomePageState extends AppScreenState<HomePage> {
                               )
                             ]),
                       ),
-                    if (state.isCategoryLoading ||state.isNewsLoading)
-                      const Expanded(
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
+
 
                   ],
                 ),
+
+                new Positioned(child: state.isCategoryLoading||state.isNewsLoading?Center(
+                  child: CircularProgressIndicator(),
+                ) :new Container(),)
 
               ],
             ),

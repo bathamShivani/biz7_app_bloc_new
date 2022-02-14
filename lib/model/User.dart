@@ -62,12 +62,12 @@ class Data {
     id: json["id"],
     firstName: json["first_name"]==null?'':json["first_name"],
     lastName: json["last_name"]==null?'':json["last_name"],
-    dob: json["dob"],
-    gender: json["gender"],
-    email: json["email"],
-    phone: json["phone"],
-    address: json["address"],
-    profileImage: json["profile_image"],
+    dob: json["dob"]==null?'':json["dob"],
+    gender: json["gender"]==null?'':json["gender"],
+    email: json["email"]==null?'':json["email"],
+    phone: json["phone"]==null?'':json["phone"],
+    address: json["address"]==null?'':json["address"],
+    profileImage: json["profile_image"]==null?'':json["profile_image"],
     createdDate: DateTime.parse(json["created_date"]),
   );
 

@@ -65,7 +65,7 @@ class HomePageCubit extends Cubit<HomePageState> {
     });
   }
 
-  Future<void> fetchnews(int page, {int catID=1 ,String searchText=""}) async {
+  Future<void> fetchnews(int page, {int catID=11 ,String searchText=""}) async {
 
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     emit(state.copyWith(isNewsLoading: true));

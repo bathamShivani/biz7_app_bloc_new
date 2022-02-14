@@ -51,6 +51,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
           state.copyWith(
             news: r.data,
             isNewsLoading : false,
+              isErrorMessage:false
           ),
         );
         /*final liveClassResponse =
