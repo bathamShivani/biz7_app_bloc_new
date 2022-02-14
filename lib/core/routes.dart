@@ -7,6 +7,8 @@ import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.
 import 'package:biz_app_bloc/feature/home_navigation/home.dart';
 import 'package:biz_app_bloc/feature/login/bloc/login_bloc.dart';
 import 'package:biz_app_bloc/feature/login/login_page.dart';
+import 'package:biz_app_bloc/feature/setting/cubit/edit_profile_bloc.dart';
+import 'package:biz_app_bloc/feature/setting/edit_profile_page.dart';
 import 'package:biz_app_bloc/feature/splash_screen/cubit/splash_cubit.dart';
 import 'package:biz_app_bloc/feature/splash_screen/splash_screen_view.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,8 @@ enum Screen {
   home,
   detail,
   pdfview,
-  webview
+  webview,
+  profile
 }
 
 class Router {
@@ -100,6 +103,16 @@ class Router {
                 BlocProvider(
                   create: (context) => LoginBloc(),
                   child: WebViewPage(
+                      arguments: settings.arguments != null
+                          ? settings.arguments as Bundle
+                          : null),
+                ));
+      case Screen.profile:
+        return MaterialPageRoute(
+            builder: (_) =>
+                BlocProvider(
+                  create: (context) => EditPageBloc(),
+                  child: ProfileScreen(
                       arguments: settings.arguments != null
                           ? settings.arguments as Bundle
                           : null),

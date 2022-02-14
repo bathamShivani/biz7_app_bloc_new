@@ -2,7 +2,7 @@ import 'package:biz_app_bloc/utility/borders.dart';
 import 'package:flutter/material.dart';
 
 
-enum UsernameType { mobile, email, emailMobile }
+enum UsernameType {fname,lname, mobile, email,address}
 
 class UsernameEditText extends StatelessWidget {
   UsernameEditText(
@@ -12,12 +12,16 @@ class UsernameEditText extends StatelessWidget {
     this.isReadOnly,
     this.borderRadius,
     required this.usernameType,
+        required this.hint_text,
+         this.isnum=false
   }) : super(key: key);
   final TextEditingController editTextController;
   final bool? isValid;
+  final bool isnum;
   final bool? isReadOnly;
   final BorderRadius? borderRadius;
   final UsernameType usernameType;
+  final String hint_text;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,7 @@ class UsernameEditText extends StatelessWidget {
 
         controller: editTextController,
         autocorrect: false,
-        keyboardType:TextInputType.number,
+        keyboardType:isnum?TextInputType.number:TextInputType.text,
         style: textTheme.bodyText2,
         readOnly: isReadOnly ?? false,
         // autofillHints: [AutofillHints.email],
@@ -36,7 +40,7 @@ class UsernameEditText extends StatelessWidget {
             isValid! ? null : _getInvalidMessage(context, usernameType),
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 1.0),
-          hintText: 'Mobile Number',
+          hintText: hint_text,
           hintStyle: textTheme.caption,
         ),
 
@@ -49,6 +53,19 @@ class UsernameEditText extends StatelessWidget {
 
       case UsernameType.mobile:
         return 'Enter valid mobile number';
+
+      case UsernameType.fname:
+        return 'Enter valid first name';
+
+      case UsernameType.lname:
+        return 'Enter valid last name';
+
+      case UsernameType.email:
+        return 'Enter valid email id';
+
+      case UsernameType.address:
+        return 'Enter valid address';
+
       default:
         return 'Enter mobile number';
     }

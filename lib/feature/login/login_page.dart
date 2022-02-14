@@ -125,6 +125,8 @@ class LoginPageState extends AppScreenState<LoginPage> {
                       isValid:state.isPartial!||state.isSubmitting
                       !?true: state.isMobile,
                       usernameType: UsernameType.mobile,
+                      hint_text: 'Mobile Number',
+                      isnum: true,
                     ),
                     if (state.isPartial!)
                       Column(
