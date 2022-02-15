@@ -20,6 +20,8 @@ class EditPageBloc extends Bloc<EditProfileEvent, EditProfileState> {
       ) async* {
     if (event is NameChanged)
       yield state.update(isfNameValid: Validators.isValidFirstName(event.name));
+    if (event is LastNameChanged)
+      yield state.update(islNameValid: Validators.isValidFirstName(event.name));
 
     if (event is EmailChanged)
       yield state.update(isEmailValid: Validators.isValidEmail(event.email));

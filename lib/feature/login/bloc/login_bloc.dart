@@ -25,6 +25,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         yield state.copyWith(
           isMobile: true, );
       }
+      else{
+        yield state.copyWith(
+          isMobile: false, );
+      }
     }
 
     if (event is PasswordChanged)
@@ -42,8 +46,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (!state.isMobile) {
         if (Validators.isValidMobile(event.mobile)) {
           yield state.copyWith(
-               isMobile: true, );
+               isMobile: true);
         }
+
       } else {
 
         if (state.isMobile)

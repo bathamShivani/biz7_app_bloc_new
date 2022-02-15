@@ -73,10 +73,10 @@ class Validator {
       return '';
   }
 
-  String fname(String value) {
+  String fname(String? value) {
     String pattern = r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
     RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(value))
+    if (!regex.hasMatch(value!))
       return 'Please enter first name';
     else
       return '';

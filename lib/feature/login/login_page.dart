@@ -109,7 +109,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
                     state.isPartial!
                         ? SpaceH60()
                         : SpaceH96(),
-                    Container(
+                    /*Container(
                       padding: EdgeInsets.symmetric(horizontal: 4.0),
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -119,14 +119,21 @@ class LoginPageState extends AppScreenState<LoginPage> {
                     ),
                     SizedBox(
                       height: 8.0,
-                    ),
+                    ),*/
                     UsernameEditText(
                       _mobileController,
                       isValid:state.isPartial!||state.isSubmitting
                       !?true: state.isMobile,
+                      iconPrefix: Icons.email,
+                      fieldTitle: StringConst.label.MOBILE_NO,
+
                       usernameType: UsernameType.mobile,
                       hint_text: 'Mobile Number',
                       isnum: true,
+                      hasPrefixText: true,
+                      prefixText: StringConst.label.P_MOBILE_NO,
+                      hasPrefixIcon: false,
+
                     ),
                     if (state.isPartial!)
                       Column(
@@ -179,16 +186,22 @@ class LoginPageState extends AppScreenState<LoginPage> {
                         ],
                       ),
                     SpaceH24(),
+                    !state.isSubmitting!?
+
                     PrimaryButton(
                         title: state.isPartial!
                             ? CommonButtons.Sign_in
                             : CommonButtons.Send_OTP,
                         isLoading: state.isSubmitting!?true:false,
                         onPressed: () {
+                          state.isMobile?
                          state.isPartial!
                               ? sigInWithOtp()
-                              : _onLoginPressed();
-                        }, backgroundColor: Colors.red,),
+                              : _onLoginPressed():
+                          ScaffoldMessenger.of(globalKey.currentContext!).showSnackBar(
+                              SnackBar(content: Text('Please enter mobile Number')));
+                        }, backgroundColor: Colors.red):const Center(child: CircularProgressIndicator(color: Colors.red,)),
+
                     SpaceH4(),
                     if (state.isFailure!)
                       Text(

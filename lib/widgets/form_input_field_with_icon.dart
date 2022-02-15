@@ -106,8 +106,7 @@ class FormInputFieldWithIcon extends StatelessWidget {
                               // color: prefixIconColor,
                               // height: prefixIconHeight,
                             ),
-                          ) ??
-                          Container(),
+                          )
                     )
                   : hasPrefixText
                       ? Padding(

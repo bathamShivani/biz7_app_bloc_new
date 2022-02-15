@@ -18,7 +18,13 @@ class NameChanged extends EditProfileEvent {
   @override
   List<Object> get props => [name];
 }
+class LastNameChanged extends EditProfileEvent {
+  LastNameChanged(this.name);
+  final String name;
 
+  @override
+  List<Object> get props => [name];
+}
 class EmailChanged extends EditProfileEvent {
   EmailChanged(this.email);
   final String email;

@@ -102,7 +102,7 @@ class LoginState extends Equatable {
   final bool isUsernameReadOnly;
 
   bool get isUsernameValid => isEmailValid!;
-  bool get isFormValid => (isEmailValid! && isPasswordValid! || isOtpValid!);
+  bool get isFormValid => (isMobile);
 
   LoginState update({
     bool? isMobile,

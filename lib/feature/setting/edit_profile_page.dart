@@ -34,6 +34,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController addressController = TextEditingController();
   TextEditingController genderController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
 
   List gender = ["Male", "Female", "Other"];
   var select;
@@ -43,20 +44,20 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
     // TODO: implement onInit
     super.onInit();
     editPageBloc = BlocProvider.of<EditPageBloc>(context);
-    fnameController.addListener(_onfNameChanged());
-    lnameController.addListener(_onlNameChanged());
+    fnameController.addListener(_onfNameChanged);
+    lnameController.addListener(_onlNameChanged);
     emailController.addListener(_onEmailChanged);
     mobileController.addListener(_onMobileChanged);
-    addressController.addListener(_onAddressChanged());
+    //addressController.addListener(_onAddressChanged);
 
   }
-   _onfNameChanged() {
+  void _onfNameChanged() {
     editPageBloc.add(NameChanged(fnameController.text));
   }
-  _onlNameChanged() {
-    editPageBloc.add(NameChanged(lnameController.text));
+  void _onlNameChanged() {
+    editPageBloc.add(LastNameChanged(lnameController.text));
   }
-  _onAddressChanged() {
+  void _onAddressChanged() {
     editPageBloc.add(NameChanged(addressController.text));
   }
   void _onEmailChanged() {
@@ -67,8 +68,6 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
   }
 
 
-
-
   @override
   Widget setView() {
     return Scaffold(
@@ -77,7 +76,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
           child: CustomAppBar(
             title: StringConst.PROFILE_SCREEN.toUpperCase(),
             leading: InkWell(
-              onTap: () => navigateToBack(),
+              onTap: (){navigateToBack();},
               child: Icon(
                 Icons.arrow_back_outlined,
                 color: AppColors.black,
@@ -145,104 +144,79 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: <Widget>[
                           SpaceH8(),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'First Name',
-                              style: textTheme.bodyText2,
-                            ),
-                          ),
-
                           UsernameEditText(
                             fnameController,
                             isValid:state.isfNameValid,
                             usernameType: UsernameType.fname,
                             hint_text: 'First Name',
-                          ),
+                            iconPrefix: Icons.person_outline,
+                            fieldTitle: StringConst.label.FNAME,
+                            hasPrefixIcon: true,
 
-                          SizedBox(
-                            height: 10.0,
-                          ),
 
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Last Name',
-                              style: textTheme.bodyText2,
-                            ),
                           ),
+                          SpaceH8(),
 
                           UsernameEditText(
                             lnameController,
                             isValid:state.islNameValid,
-
+                            iconPrefix: Icons.person_outline,
+                            fieldTitle: StringConst.label.LNAME,
+                            hasPrefixIcon: true,
                             usernameType: UsernameType.lname,
-                            hint_text: 'Last Name',
+                            hint_text: StringConst.label.LNAME,
                           ),
 
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Mobile Number',
-                              style: textTheme.bodyText2,
-                            ),
-                          ),
+                          SpaceH8(),
 
                           UsernameEditText(
                             mobileController,
                             isValid:state.isNumberValid,
-
+                            iconPrefix: Icons.phone_android_rounded,
+                            hasPrefixIcon: true,
+                            fieldTitle: StringConst.label.MOBILE_NO,
                             usernameType: UsernameType.mobile,
                             hint_text: 'Mobile Number',
                             isnum: true,
                           ),
 
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Email Id',
-                              style: textTheme.bodyText2,
-                            ),
-                          ),
+                          SpaceH8(),
 
                           UsernameEditText(
                             emailController,
                             isValid:state.isEmailValid,
-
+                            iconPrefix: Icons.email,
+                            fieldTitle: StringConst.label.EMAIL,
+                            hasPrefixIcon: true,
                             usernameType: UsernameType.email,
                             hint_text: 'Email Id',
                           ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                         /* Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Date of Birth',
-                              style: textTheme.bodyText2,
-                            ),
-                          ),
-
+                          SpaceH8(),
                           UsernameEditText(
-                            fnameController,
+                             dobController,
+                            iconPrefix: Icons.calendar_today_outlined,
+                            hasPrefixText: true,
+                            fieldTitle: StringConst.label.BOD,
+                            hasPrefixIcon: true,
+                            isReadOnly: true,
+                            isValid: true,
+                            hint_text: 'Date of birth',
+                            usernameType: UsernameType.address,
 
-                            usernameType: UsernameType.mobile,
-                            hint_text: 'Dob',
-                          ),*/
-                          SizedBox(
-                            height: 10.0,
+                            onTap: () async {
+                              await showDatePicker(
+                                  context: context,
+                                  initialDate: new DateTime(2001),
+                                  firstDate: new DateTime(1900),
+                                  lastDate: new DateTime(2100))
+                                  .then((value) {
+                                dobController.text =
+                                    value.toString().substring(0, 10);
+                              });
+                            },
                           ),
+                          SpaceH8(),
+
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 4.0),
                             alignment: Alignment.centerLeft,
@@ -270,30 +244,27 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                     genderController.text = value
                                   }),
                             ]),),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Address',
-                              style: textTheme.bodyText2,
-                            ),
-                          ),
+
+                          SpaceH8(),
+
                           UsernameEditText(
                             addressController,
-                            isValid:state.isAddressValid,
-
+                            isValid:true,
+                            iconPrefix: Icons.card_membership_outlined,
+                            hasPrefixIcon: true,
+                            fieldTitle: StringConst.label.ADDRESS,
                             usernameType: UsernameType.address,
                             hint_text: 'Address',
                           ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
+                          SpaceH8(),
+
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               OutlinedButton(
                                 onPressed: () {
+
                                   /* editProfileController.fNameController.text =
                              user.first_name;
                          editProfileController.lNameController.text =
@@ -308,6 +279,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                              user.address;
                          editProfileController.mobileController.text =
                              user.phone;*/
+                                  Navigator.pop(context);
                                 },
                                 child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -353,6 +325,14 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                                   color: AppColors
                                                       .primaryColor)))),
                                   onPressed: () {
+                                    if (select != null) {
+                                      print('select gender' + select);
+                                      genderController.text = select;
+                                    }
+                                    else{
+                                      ScaffoldMessenger.of(globalKey.currentContext!).showSnackBar(
+                                          SnackBar(content: Text('Please select gender')));
+                                    }
                                     /*if (_formKey.currentState.validate()) {
                              if (select != null) {
                                print('select gender' + select);

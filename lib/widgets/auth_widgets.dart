@@ -1,8 +1,9 @@
 import 'package:biz_app_bloc/utility/borders.dart';
+import 'package:biz_app_bloc/utility/colors.dart';
+import 'package:biz_app_bloc/utility/sizes.dart';
 import 'package:flutter/material.dart';
 
-
-enum UsernameType {fname,lname, mobile, email,address}
+enum UsernameType { fname, lname, mobile, email, address }
 
 class UsernameEditText extends StatelessWidget {
   UsernameEditText(
@@ -10,47 +11,132 @@ class UsernameEditText extends StatelessWidget {
     Key? key,
     this.isValid,
     this.isReadOnly,
-    this.borderRadius,
     required this.usernameType,
-        required this.hint_text,
-         this.isnum=false
+    required this.fieldTitle,
+    required this.hint_text,
+    this.isnum = false,
+    required this.iconPrefix,
+    this.hasPrefixIcon = false,
+    this.hasPrefixText = false,
+    this.borderColor = Colors.grey,
+    this.focusedBorderColor = Colors.red,
+    this.enabledBorderColor = Colors.grey,
+    this.enabledField = true,
+    this.prefixText,this.onTap,
   }) : super(key: key);
   final TextEditingController editTextController;
   final bool? isValid;
   final bool isnum;
   final bool? isReadOnly;
-  final BorderRadius? borderRadius;
   final UsernameType usernameType;
   final String hint_text;
+  final IconData iconPrefix;
+  final bool hasPrefixIcon;
+  final bool hasPrefixText;
+  final String? prefixText;
+  final String fieldTitle;
+  final Color borderColor;
+  final Color focusedBorderColor;
+  final Color enabledBorderColor;
+  final bool enabledField;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Container(
-      child: TextFormField(
+    ThemeData theme = Theme.of(context);
 
-        controller: editTextController,
-        autocorrect: false,
-        keyboardType:isnum?TextInputType.number:TextInputType.text,
-        style: textTheme.bodyText2,
-        readOnly: isReadOnly ?? false,
-        // autofillHints: [AutofillHints.email],
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        validator: (value) =>
-            isValid! ? null : _getInvalidMessage(context, usernameType),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 1.0),
-          hintText: hint_text,
-          hintStyle: textTheme.caption,
+    TextStyle titleTextStyle = theme.textTheme.caption!;
+    TextStyle formHintTextStyle = theme.textTheme.bodyText2!.copyWith(
+      color: AppColors.grey,
+    );
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin:
+              EdgeInsets.only(right: Sizes.PADDING_18, left: Sizes.PADDING_18),
+          child:
+              formFieldTitle(fieldTitle: fieldTitle, textStyle: titleTextStyle),
         ),
+        TextFormField(
+          enabled: enabledField,
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: borderColor,
+              ),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: enabledBorderColor,
+              ),
+            ),
+            disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                color: enabledBorderColor,
+              ),
+            ),
+            focusedBorder: UnderlineInputBorder(
+              borderRadius: BorderRadius.circular(6),
+              borderSide: BorderSide(
+                color: focusedBorderColor,
+              ),
+            ),
+            hintText: hint_text,
+            hintStyle: formHintTextStyle,
+            prefixIcon: hasPrefixIcon
+                ? Padding(
+                    padding: EdgeInsets.only(
+                        right: Sizes.PADDING_0, left: Sizes.PADDING_0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: Sizes.ICON_SIZE_16,
+                      width: Sizes.ICON_SIZE_16,
+                      child: Icon(
+                        iconPrefix,
+                        color: AppColors.secodaryText,
+                        size: Sizes.ICON_SIZE_20,
+                        // color: prefixIconColor,
+                        // height: prefixIconHeight,
+                      ),
+                    ))
+                : hasPrefixText
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                            top: Sizes.PADDING_16,
+                            bottom: Sizes.PADDING_16,
+                            right: Sizes.PADDING_16),
+                        child: Text(
+                          prefixText!,
+                        ))
+                    : null,
+          ),
 
-      ),
+          controller: editTextController,
+          autocorrect: false,
+          keyboardType: isnum ? TextInputType.number : TextInputType.text,
+          style: formHintTextStyle,
+          readOnly: isReadOnly ?? false,
+          // autofillHints: [AutofillHints.email],
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          onTap: onTap,
+          validator: (value) =>
+              isValid! ? '' : _getInvalidMessage(context, usernameType),
+        ),
+       /* new Container(
+          margin:
+              EdgeInsets.only(right: Sizes.PADDING_16, left: Sizes.PADDING_16),
+          child: Divider(
+            height: 2,
+            color: AppColors.greyShade6,
+          ),
+        )*/
+      ],
     );
   }
 
   String _getInvalidMessage(BuildContext context, UsernameType type) {
     switch (type) {
-
       case UsernameType.mobile:
         return 'Enter valid mobile number';
 
@@ -69,6 +155,17 @@ class UsernameEditText extends StatelessWidget {
       default:
         return 'Enter mobile number';
     }
+  }
+
+  Widget formFieldTitle(
+      {required String fieldTitle, required TextStyle textStyle}) {
+    return Container(
+      margin: EdgeInsets.only(bottom: Sizes.MARGIN_4),
+      child: Text(
+        fieldTitle,
+        style: textStyle,
+      ),
+    );
   }
 }
 
