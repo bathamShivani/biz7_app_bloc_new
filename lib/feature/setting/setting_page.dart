@@ -104,7 +104,7 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
                       return InkWell(
                         onTap: ()  {
                           if (index == 0)
-                              navigateToScreenAndReplace(Screen.profile);
+                            navigateToScreen(Screen.profile);
 
                           else
                             {_onLogout();}

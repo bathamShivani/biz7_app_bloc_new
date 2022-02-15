@@ -1,6 +1,7 @@
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
+import 'package:biz_app_bloc/data/data_helper.dart';
 import 'package:biz_app_bloc/feature/setting/cubit/edit_profile_bloc.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/form_validator.dart';
@@ -15,7 +16,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/navigator.dart';
 import 'package:flutter/src/widgets/routes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:biz_app_bloc/model/User.dart' as info;
+import 'package:webview_flutter/webview_flutter.dart';
 const kSpacingUnit = 10;
 
 class ProfileScreen extends AppScreen {
@@ -39,6 +41,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
   List gender = ["Male", "Female", "Other"];
   var select;
   late EditPageBloc editPageBloc;
+  var result;
   @override
   void onInit() {
     // TODO: implement onInit
@@ -49,7 +52,13 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
     emailController.addListener(_onEmailChanged);
     mobileController.addListener(_onMobileChanged);
     //addressController.addListener(_onAddressChanged);
+    getUserInfo();
+  }
 
+  void getUserInfo() async{
+    final DataHelper _dataHelper = DataHelperImpl.instance;
+     result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    mobileController.text=result.data.phone;
   }
   void _onfNameChanged() {
     editPageBloc.add(NameChanged(fnameController.text));
