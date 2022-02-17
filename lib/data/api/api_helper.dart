@@ -27,6 +27,8 @@ class ApiEndPoints {
   static final String newsUrl = 'api-news';
   static final String bookmarkUrl = 'api-get-bookmark-news';
   static final String updatebookmarkUrl = 'api-bookmark-news';
+  static final String updateProfile = 'api-update-profile';
+  static final String updateProfilePic = 'api-update-profile-pic';
 
 }
 
@@ -37,6 +39,8 @@ abstract class ApiHelper {
   Future<Either<CustomException, NewsCategory>> executeNews(int page, List<int> categories,int user_id,String search_text);
   Future<Either<CustomException, NewsCategory>> executeBookmark(int page, List<int> categories,int user_id);
   Future<Either<CustomException, String>> updateBookmark(int news_id, int is_bookmark,int user_id);
+  Future<Either<CustomException, User>> updateProfile(int user_id, String fname,String lname,String dob,String gender,String email,String address);
+  Future<Either<CustomException, User>> updateProfilePic(int user_id, path);
 
 }
 
@@ -150,6 +154,45 @@ return Left(throw new CustomException(200,response['msg'],"'"));
       });
       if(response["error"]==false){
       return Right(response["msg"]);}
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, User>> updateProfile(user_id,fname,lname,dob,gender,email,address) async {
+
+    //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    try {
+      final response =
+      await _api.post( ApiEndPoints.updateProfile, {
+
+        "user_id":user_id,
+        "first_name":fname,
+        "last_name":lname,
+        "dob":dob,
+        "gender":gender,
+        "email":email,
+        "address":address
+      });
+      if(response["error"]==false){
+      return Right(User.fromJson(response));}
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, User>> updateProfilePic(user_id,path) async {
+
+    //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    try {
+      final response =
+      await _api.postMultiPart(path,user_id);
+      if(response["error"]==false){
+        return Right(User.fromJson(response));}
       return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {
       return Left(e);

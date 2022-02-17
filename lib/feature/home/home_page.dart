@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/data/api/api_helper.dart';
 import 'package:biz_app_bloc/feature/home/cubit/home_page_cubit.dart';
-import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/images.dart';
@@ -15,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-
 
 class HomePage extends AppScreen {
   HomePage(
@@ -28,7 +25,6 @@ class HomePage extends AppScreen {
 class _HomePageState extends AppScreenState<HomePage> {
   final _scrollController = ScrollController();
   late HomePageCubit _cubit;
-  int _courseProgress = 0;
   String name = '';
   String selectedEventName = '';
   int selectedEventindex = -1;
@@ -39,8 +35,6 @@ class _HomePageState extends AppScreenState<HomePage> {
     _cubit = BlocProvider.of<HomePageCubit>(context)
       ..fetchMyCategories()
       ..fetchnews(0);
-
-   // _scrollController.addListener(_onListScrolled);
     super.onInit();
   }
 
@@ -56,8 +50,6 @@ class _HomePageState extends AppScreenState<HomePage> {
     return BlocConsumer<HomePageCubit, HomePageState>(
       listener: (context, state) {
         if (state.isCategoryFailure) showSnackBar(state.errorMessage);
-        //if (state.isNewsFailure) showSnackBar(state.errorMessage);
-
       },
       builder: (context, state) {
         return Scaffold(
@@ -68,7 +60,6 @@ class _HomePageState extends AppScreenState<HomePage> {
             automaticallyImplyLeading: false,
             title: Image.asset(
               ImagePath.LOGO,
-              // fit: BoxFit.cover,
               height: Sizes.ICON_SIZE_32,
             ),
             actions: <Widget>[
@@ -76,15 +67,8 @@ class _HomePageState extends AppScreenState<HomePage> {
                 icon: FaIcon(FontAwesomeIcons.bell,
                 color: Colors.black,),
                 onPressed: () {
-                  // showSearch(context: context, delegate: SearchNewsPage());
                 },
               ),
-              /*IconButton(
-            icon: SvgPicture.asset(ImagePath.MENU, height: Sizes.ICON_SIZE_30),
-            onPressed: () {
-              // showSearch(context: context, delegate: SearchNewsPage());
-            },
-          ),*/
             ],
           ),
           body: Container(
@@ -103,20 +87,11 @@ class _HomePageState extends AppScreenState<HomePage> {
                             hintText: StringConst.sentence.Search,
                             hintStyle: TextStyle(color: Colors.grey.shade600),
 
-                            suffixIcon: InkWell(
-                              onTap: () {
-                                //print(_searchController.text);
-                                //search();
-                              },
-                              child: new Container(
-                                height: 20,
-                                child: FaIcon(
-                                  FontAwesomeIcons.search,
-                                  /*height: 20,
-                                  width: 20,
-                                  fit: BoxFit.contain,*/
-                                  color: AppColors.grey,
-                                ),
+                            suffixIcon: new Container(
+                              height: 20,
+                              child: FaIcon(
+                                FontAwesomeIcons.search,
+                                color: AppColors.grey,
                               ),
                             ),
                             filled: true,
@@ -125,12 +100,10 @@ class _HomePageState extends AppScreenState<HomePage> {
                             border: InputBorder.none,
                             enabledBorder: InputBorder.none,
                           ),
-                         /// controller: _searchController,
                           onSubmitted: (value){
                             print(value);
                             _cubit.fetchnews(0,
                                 catID: state.selectedCatId,searchText:value);
-                            //search();
                           },
                           onChanged: (value){
                             if(value==''){
@@ -141,7 +114,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                         ),
                       ),
                     ),
-                    //SearchLine(widthOfScreen: widthOfScreen),
                     Padding(
                       padding: EdgeInsets.only(top: 16, left: 16, right: 16),
                       child: Divider(
@@ -155,7 +127,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-
                               if (state.category.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -235,9 +206,7 @@ class _HomePageState extends AppScreenState<HomePage> {
                                           onEndOfPage: () => {
                                             if(state.isReloading)
                                               _cubit.fetchnews(state.page+1),
-                                            print(
-                                                "sdsvvsvdsv>>>>>>>>>  ffff>>>>>>>>>>>>>>>>>>>>>>>...@@@@@@@****************"+state.page.toString())
-                                          },
+                                            },
 
                                     child:  ListView.builder(
                                           shrinkWrap: true,
@@ -246,7 +215,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                                             Datum news = state.news[index];
                                             return InkWell(
                                               onTap: () {
-
                                                 final _bundle = Bundle()
                                                 ..put('news', state.news)
                                                 ..put('index', index);
@@ -254,9 +222,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                                                     Screen.detail,
                                                     _bundle);
                                               },
-                                              /*onTap: () => Get.to(() => DetailPage(
-                                                  news: homeController.news,
-                                                  index: index)).then(onGoBack),*/
                                               child: Padding(
                                                 padding: const EdgeInsets.fromLTRB(
                                                     0.0, 0.5, 0.0, 0.5),
@@ -286,13 +251,6 @@ class _HomePageState extends AppScreenState<HomePage> {
                                                                         fontWeight: FontWeight.bold
                                                                     ),
 
-                                                                    /* style: Theme.of(context)
-                                                    .textTheme
-                                                    .subtitle1
-                                                    .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    )*/
                                                                   ),
                                                                   Row(
                                                                     mainAxisAlignment:
@@ -377,36 +335,11 @@ class _HomePageState extends AppScreenState<HomePage> {
                                                 ),
                                               ),
                                             );
-
-                                            // return Padding(
-                                            //   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                            //   child: Container(
-                                            //       decoration: BoxDecoration(
-                                            //         color: AppColors.backColor,
-                                            //         borderRadius:
-                                            //             BorderRadius.all(Radius.circular(40)),
-                                            //       ),
-                                            //       child: Padding(
-                                            //         padding: const EdgeInsets.symmetric(
-                                            //             horizontal: 30.0, vertical: 16.0),
-                                            //         child: Text(
-                                            //           _dx.news[index].news_title,
-                                            //           style: Theme.of(context)
-                                            //               .textTheme
-                                            //               .bodyText1
-                                            //               .copyWith(
-                                            //                   // fontWeight: FontWeight.bold,
-                                            //                   ),
-                                            //         ),
-                                            //       )),
-                                            // );
                                           }))
-                                  //),
                                 ),
                               ):Expanded(
                                 child: Center(
                                   child: new Text(state.errorMessage,
-
                                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                                         fontWeight: FontWeight.w600,color: AppColors.red,
                                       )),
@@ -414,15 +347,12 @@ class _HomePageState extends AppScreenState<HomePage> {
                               )
                             ]),
                       ),
-
-
                   ],
                 ),
 
                 new Positioned(child: state.isCategoryLoading||state.isNewsLoading?Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(color: Colors.red,),
                 ) :new Container(),)
-
               ],
             ),
           ),
@@ -440,17 +370,4 @@ class _HomePageState extends AppScreenState<HomePage> {
 
     super.onBackResult(bundle);
   }
-
-
-/*
-  void _onListScrolled() {
-    if (_scrollController.offset ==
-        _scrollController.position.maxScrollExtent &&
-        !_cubit.isFetching) {
-      _cubit
-        ..isFetching = true
-        ..fetchMyCoursesList();
-    }
-  }
-*/
 }

@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/model/User.dart';
 import 'package:biz_app_bloc/utility/validators.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:biz_app_bloc/model/User.dart' as info;
 
 
 part 'edit_profile_state.dart';
@@ -36,98 +39,34 @@ class EditPageBloc extends Bloc<EditProfileEvent, EditProfileState> {
       yield state.update(
           isPasswordValid: Validators.isValidPassword(event.password));
 
-    if (event is SignupWithCredentialsClicked)
-     // yield* _signUpWithCredentials(event);
-
-  //  if (event is SendOtpClicked) yield* _sendOtp(event);
-
-    //if (event is VerifyOtpClicked) yield* _verifyOtp(event);
-
-    // if (event is GoogleSignupClicked)
-    //   yield* _googleSignup();
-    // if (event is FacebookSignupClicked)
-    //   yield* _facebookSignup();
-    //else
-      UnimplementedError();
   }
+  Future<void> updateProfile(fname,lname,dob,gender,email,address) async {
+    emit(state.copyWith(isSubmitting: true));
+    final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    final response = await _dataHelper.apiHelper.updateProfile(result.data.id,fname,lname,dob,gender,email,address);
 
- /* Stream<EditProfileState> _sendOtp(SendOtpClicked event) async* {
-    yield state.copyWith(isSubmitting: true);
-    final response =
-    await _dataHelper.apiHelper.executeSendOtpRegister(event.number);
-    yield* response.fold((l) async* {
-      yield state.copyWith(
-        isSubmitting: false,
-        isSuccess: false,
-        isFailure: true,
-        errorMessage: l.errorMessage,
-      );
-    }, (r) async* {
-      yield state.copyWith(
-        isSubmitting: false,
-        isFailure: false,
-        signUpStage: SignUpStage.verifyOtp,
-      );
+
+    response.fold((l) {
+      print('failure');
+      print(l.errorMessage);
+      emit(state.copyWith(errorMessage : l.errorMessage,isSuccess: false,isFailure: true,isSubmitting: false));
+    }, (r) async{
+      print('success');
+      print(r);
+      await _dataHelper.cacheHelper.saveUserInfo(userToJson(r));
+      emit(state.copyWith(errorMessage : 'Profile detail updated successfully.',isFailure: false,isSuccess: true,isSubmitting: false));
     });
   }
-
-  Stream<EditProfileState> _verifyOtp(VerifyOtpClicked event) async* {
-    yield state.copyWith(isSubmitting: true);
-    final response = await _dataHelper.apiHelper
-        .executeVerifyOtpRegister(event.number, event.otp);
-    yield* response.fold((l) async* {
-      yield state.copyWith(
-        isSubmitting: false,
-        isSuccess: false,
-        isFailure: true,
-        errorMessage: l.errorMessage,
-      );
-    }, (r) async* {
-      if (r.status == 'wrong_otp') {
-        yield state.copyWith(
-          isSubmitting: false,
-          isSuccess: false,
-          isFailure: true,
-          errorMessage: 'wrong otp',
-        );
-      } else {
-        yield state.copyWith(
-          isSubmitting: false,
-          isFailure: false,
-          signUpStage: SignUpStage.registerUser,
-        );
-      }
+  Future<void> updateProfilePic(File file) async {
+    print('file.path updateProfile' + file.path);
+    emit(state.copyWith(isSubmitting: true));
+    final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    final response = await _dataHelper.apiHelper.updateProfilePic(result.data.id,file.path);
+    response.fold((l) {
+      emit(state.copyWith(errorMessage : l.errorMessage,ispicupdate:false));
+    }, (r) async{
+      await _dataHelper.cacheHelper.saveUserInfo(userToJson(r));
+      emit(state.copyWith(errorMessage : 'Profile detail updated successfully.',ispicupdate: true));
     });
   }
-
-  Stream<EditProfileState> _signUpWithCredentials(
-      SignupWithCredentialsClicked event) async* {
-    yield state.copyWith(isSubmitting: true);
-    final response = await _dataHelper.apiHelper.executeSignUp(
-      SignUpRequest(
-        name: event.name,
-        email: event.email,
-        password: event.password,
-        phoneNo: event.number,
-        confirmPassword: event.password,
-      ),
-    );
-    yield* response.fold(
-          (l) async* {
-        yield state.copyWith(
-          isSubmitting: false,
-          isSuccess: false,
-          isFailure: true,
-          errorMessage: l.errorMessage,
-        );
-      },
-          (r) async* {
-        yield state.copyWith(
-          isSubmitting: false,
-          isSuccess: true,
-          isFailure: false,
-        );
-      },
-    );
-  }*/
 }

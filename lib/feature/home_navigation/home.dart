@@ -8,7 +8,6 @@ import 'package:biz_app_bloc/feature/setting/setting_page.dart';
 import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
 import 'package:biz_app_bloc/feature/home/home_page.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
-import 'package:biz_app_bloc/utility/images.dart';
 import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,9 +57,6 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
 
     ];
     _bodyWidgets = [
-      /*HomePage(),
-      BookmarkPage(),
-      SettingScreen(),*/
       BlocProvider.value(
         value: _homePageCubit,
         child: HomePage(),
@@ -70,16 +66,6 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
         child: BookmarkPage(),
       ),
       SettingScreen(),
-      /*BlocProvider(
-        create: (context) => NewsFeedCubit(),
-        child: BookmarkPage(),
-      ),
-
-        BlocProvider(
-          create: (context) => CoursesCubit(),
-          child: SettingScreen(),
-        ),*/
-
     ];
     super.onInit();
   }
@@ -87,8 +73,6 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
   Widget _getBottomBarIcons(IconData asset, bool isActive) {
     return FaIcon(
       asset,
-      //height: 25,
-
       color: isActive ? Colors.black : AppColors.grey,
     );
   }

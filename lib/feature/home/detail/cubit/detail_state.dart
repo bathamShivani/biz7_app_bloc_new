@@ -6,11 +6,13 @@ class DetailState extends Equatable {
 
   final bool isNewsFailure;
   final bool isNewsLoading;
+  final bool isbookmark;
 
   String errorMessage;
 
   DetailState({
     this.isNewsFailure = false,
+    this.isbookmark = false,
     this.isNewsLoading = true,
     this.errorMessage = '',
   });
@@ -18,7 +20,7 @@ class DetailState extends Equatable {
   List<Object> get props {
     return [
 
-      errorMessage,isNewsLoading,isNewsFailure
+      errorMessage,isNewsLoading,isNewsFailure,isbookmark
 
     ];
   }
@@ -28,11 +30,13 @@ class DetailState extends Equatable {
         String? errorMessage,
         bool? isNewsLoading,
         bool? isNewsFailure,
+        bool? isbookmark,
       }) {
     return DetailState(
       errorMessage: errorMessage ?? this.errorMessage,
       isNewsLoading: isNewsLoading??this.isNewsLoading,
       isNewsFailure: isNewsFailure??this.isNewsFailure,
+      isbookmark: isbookmark??this.isbookmark,
 
     );
   }

@@ -3,7 +3,6 @@ import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'cubit/splash_cubit.dart';
 
 
@@ -59,7 +58,7 @@ class _SplashScreenState extends AppScreenState<SplashScreen>
               Container(
                 width: 0.0,
                 height: 45.0,
-                child: Image.asset('assets/images/business.png'),
+                child: Image.asset('assets/images/splash.png'),
               ),
               const Spacer(),
             ],

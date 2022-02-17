@@ -1,10 +1,9 @@
 import 'dart:io';
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
+import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/data/api/api_helper.dart';
 import 'package:biz_app_bloc/feature/bookmark/cubit/bookmark_cubit.dart';
-import 'package:biz_app_bloc/feature/home/cubit/home_page_cubit.dart';
-import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/images.dart';
@@ -13,7 +12,6 @@ import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:biz_app_bloc/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 
@@ -43,14 +41,13 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
 
   @override
   Widget setView() {
-
     return BlocConsumer<BookmarkCubit, BookmarkState>(
       listener: (context, state) {
         if (state.isNewsFailure) showSnackBar(state.errorMessage);
-        //if (state.isNewsFailure) showSnackBar(state.errorMessage);
 
       },
       builder: (context, state) {
+        print('state>>'+state.news.isNotEmpty.toString());
         return Scaffold(
           appBar: PreferredSize(
             preferredSize: Size.fromHeight(Sizes.HEIGHT_56),
@@ -67,20 +64,24 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (state.news.isNotEmpty)
+                     (state.news.isNotEmpty)?
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         child: ListView.builder(
                             shrinkWrap: true,
-                           // physics: NeverScrollableScrollPhysics(),
-                            // controller: homeController.scrollController.value,
                             itemCount: state.news.length,
                             itemBuilder: (context, index) {
                               Datum news = state.news[index];
                               return InkWell(
-                                //onTap: () => Get.to(DetailPage(news: homeController.bookmarks,index:index)).then(onGoBack),
-                                child: Padding(
+                                onTap: () {
+                                  final _bundle = Bundle()
+                                  ..put('news', state.news)
+                                  ..put('index', index);
+                                  navigateToScreen(Screen.detail, _bundle
+                                  );
+                                },
+                              child: Padding(
                                   padding:
                                   const EdgeInsets.fromLTRB(0.0, 0.5, 0.0, 0.5),
                                   child: Card(
@@ -100,7 +101,6 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                                               Flexible(
                                                 child: Column(
                                                   children: [
-
                                                     Text(news.newsTitle,
                                                         style: Theme.of(context)
                                                             .textTheme
@@ -146,12 +146,10 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                                                                 ),
                                                               ))
                                                         ],),
-
                                                       ],
                                                     ),
                                                   ],
                                                 ),
-
                                               ),
                                               Container(
                                                   height: 65.0,
@@ -160,8 +158,7 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                                                   child: FadeInImage.assetNetwork(
                                                     placeholder:
                                                     ImagePath.PLACEHOLDER,
-                                                    image:ApiEndPoints.BASE_IMAGE_URL +news.smallImg
-                                                    ,
+                                                    image:ApiEndPoints.BASE_IMAGE_URL +news.smallImg,
                                                     fit: BoxFit.cover,
                                                   )),
 
@@ -177,7 +174,7 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                               );
                             }),
                       ),
-                    ),
+                    ):Container(),
                     if (state.isNewsLoading)
                       const Expanded(
                         child: Center(
@@ -197,8 +194,6 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                                   )),
                             )),
                       )
-
-
                   ],
                 ),
 
@@ -209,8 +204,6 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
       },
     );
   }
-
-
 
   @override
   void onBackResult(Object? bundle) {

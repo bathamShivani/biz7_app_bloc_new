@@ -169,47 +169,6 @@ class UsernameEditText extends StatelessWidget {
   }
 }
 
-/*
-class PasswordEditText extends StatelessWidget {
-  PasswordEditText(
-    this.editTextController, {
-    Key? key,
-    this.isValid,
-  }) : super(key: key);
-  final TextEditingController editTextController;
-  final bool? isValid;
-
-  @override
-  Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-    return Container(
-      child: AutofillGroup(
-        child: TextFormField(
-          controller: editTextController,
-          autocorrect: false,
-          obscureText: true,
-          style: textTheme.bodyText2,
-          // autofillHints: [AutofillHints.password],
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (value) => isValid! ? null : l10n.invalidPassword,
-          decoration: InputDecoration(
-            // suffixIcon: IconButton(
-            //     icon: const Icon(Icons.visibility), onPressed: () {}),
-            contentPadding:
-                EdgeInsets.symmetric(horizontal: 4.w, vertical: 1.h),
-            hintText: l10n.password,
-            hintStyle: textTheme.caption,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(32),
-              borderSide: const BorderSide(width: 2, color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-*/
 
 class OtpEditText extends StatelessWidget {
   OtpEditText(

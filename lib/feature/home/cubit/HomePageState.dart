@@ -46,7 +46,6 @@ class HomePageState extends Equatable {
         String? errorMessage,
         bool? isCategoryFailure,
         bool? isCategoryLoading,
-
         List<Datum>? news,
         bool? isNewsLoading,
         bool? isNewsFailure,

@@ -51,9 +51,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
     super.dispose();
   }
 
-
   void _onEmailChanged() {
-    print("dddd"+_mobileController.text);
     _loginBloc.add(EmailChanged(_mobileController.text));
   }
 
@@ -61,9 +59,6 @@ class LoginPageState extends AppScreenState<LoginPage> {
     _loginBloc.add(OtpChanged(_otpController.text));
   }
   void _onLoginPressed() {
-
-
-    print("dddd");
     _loginBloc.add(
       LoginWithCredentialsClicked(
         _mobileController.text
@@ -80,7 +75,6 @@ class LoginPageState extends AppScreenState<LoginPage> {
   @override
   Widget setView() {
     return Container(
-
       child: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -89,7 +83,6 @@ class LoginPageState extends AppScreenState<LoginPage> {
           child: BlocConsumer<LoginBloc, LoginState>(
             listener: (context, state) {
               if (state.isSuccess!) {
-                print('true');
                 navigateToScreenAndReplace(Screen.home);
               }
               if (state.isFailure!) {
@@ -109,31 +102,18 @@ class LoginPageState extends AppScreenState<LoginPage> {
                     state.isPartial!
                         ? SpaceH60()
                         : SpaceH96(),
-                    /*Container(
-                      padding: EdgeInsets.symmetric(horizontal: 4.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Mobile Number',
-                        style: textTheme.bodyText2,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.0,
-                    ),*/
                     UsernameEditText(
                       _mobileController,
                       isValid:state.isPartial!||state.isSubmitting
                       !?true: state.isMobile,
                       iconPrefix: Icons.email,
                       fieldTitle: StringConst.label.MOBILE_NO,
-
                       usernameType: UsernameType.mobile,
                       hint_text: 'Mobile Number',
                       isnum: true,
                       hasPrefixText: true,
                       prefixText: StringConst.label.P_MOBILE_NO,
                       hasPrefixIcon: false,
-
                     ),
                     if (state.isPartial!)
                       Column(
@@ -168,9 +148,7 @@ class LoginPageState extends AppScreenState<LoginPage> {
                             ),
                             cursorColor: AppColors.black,
                             animationDuration: Duration(milliseconds: 300),
-                           // backgroundColor: AppColors.white,
                             enableActiveFill: true,
-                            // errorAnimationController: errorController,
                             keyboardType: TextInputType.number,
                             onCompleted: (otp) {
                               print("Completed");
@@ -265,14 +243,11 @@ class _BottomLineMobile extends StatelessWidget {
     TextTheme themeData = Theme.of(context).textTheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // SpaceH8(),
         Text(
           StringConst.sentence.SIGNIN_BOTTOM,
           style: themeData.caption,
         ),
-        // SpaceH8(),
         Text(
           ' ' + StringConst.sentence.Request_ACCESS,
           style: themeData.caption!.copyWith(color: AppColors.primaryColor),
@@ -288,14 +263,11 @@ class _BottomLineOtp extends StatelessWidget {
     TextTheme themeData = Theme.of(context).textTheme;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
-      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        // SpaceH8(),
         Text(
           StringConst.sentence.DNRC,
           style: themeData.caption,
         ),
-        // SpaceH8(),
         Text(
           ' ' + StringConst.sentence.Resend_Now,
           style: themeData.caption!.copyWith(color: AppColors.primaryColor),

@@ -33,6 +33,7 @@ class ImagePath {
 
   // static const PLACEHOLDER = "$imageDir/placeholder-image.png";
   static const PLACEHOLDER = "$imageDir/placeholder-image.jpeg";
+  static const profile = "$imageDir/profile.png";
   static const PLACEHOLDERww = "$imageDir/business.png";
   static const PLACEHOLDER100 = "$imageDir/business100.png";
   static const USER_PLACEHOLDER = "$imageDir/user.png";

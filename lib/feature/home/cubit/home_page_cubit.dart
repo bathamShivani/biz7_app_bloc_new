@@ -49,27 +49,13 @@ class HomePageCubit extends Cubit<HomePageState> {
             isCategoryLoading: false,
           ),
         );
-        /*final liveClassResponse =
-        await _dataHelper.apiHelper.executeMyCoursesLiveClass();
-        liveClassResponse.fold((l) {
-          emit(state.copyWith(
-            isLiveClassLoading: false,
-          ));
-        }, (r) {
-          emit(state.copyWith(
-            courseLiveClass: r.live,
-            isLiveClassLoading: false,
-          ));
-        });*/
       }
     });
   }
 
   Future<void> fetchnews(int page, {int catID=11 ,String searchText=""}) async {
-
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     emit(state.copyWith(isNewsLoading: true));
-
     final response = await _dataHelper.apiHelper.executeNews(  page, [catID],result.data.id, searchText);
 
     response.fold((l) async {
@@ -121,24 +107,7 @@ class HomePageCubit extends Cubit<HomePageState> {
             ),
           );
         }
-
-
-        /*final liveClassResponse =
-        await _dataHelper.apiHelper.executeMyCoursesLiveClass();
-        liveClassResponse.fold((l) {
-          emit(state.copyWith(
-            isLiveClassLoading: false,
-          ));
-        }, (r) {
-          emit(state.copyWith(
-            courseLiveClass: r.live,
-            isLiveClassLoading: false,
-          ));
-        });*/
       }
     });
   }
-
-
-
 }

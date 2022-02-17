@@ -22,13 +22,11 @@ class BookmarkCubit extends Cubit<BookmarkState> {
 
   Future<void> fetchBookmark() async {
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
-
     emit(state.copyWith(isNewsLoading : true));
     final response = await _dataHelper.apiHelper.executeBookmark(0, [1],result.data.id);
-
-
     response.fold((l) async {
       emit(state.copyWith(
+        news: newslist,
         isNewsFailure : true,
         isErrorMessage: true,
         errorMessage: l.errorMessage,
@@ -54,18 +52,6 @@ class BookmarkCubit extends Cubit<BookmarkState> {
               isErrorMessage:false
           ),
         );
-        /*final liveClassResponse =
-        await _dataHelper.apiHelper.executeMyCoursesLiveClass();
-        liveClassResponse.fold((l) {
-          emit(state.copyWith(
-            isLiveClassLoading: false,
-          ));
-        }, (r) {
-          emit(state.copyWith(
-            courseLiveClass: r.live,
-            isLiveClassLoading: false,
-          ));
-        });*/
       }
     });
   }

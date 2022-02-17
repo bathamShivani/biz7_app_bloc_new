@@ -34,7 +34,10 @@ class _DetailPageState extends AppScreenState<DetailPage> {
     _cubit = BlocProvider.of<DetailCubit>(context);
     news = widget.arguments?.get('news');
     index = widget.arguments?.get('index');
-    isBookMark =news[index].isBookmark == '1' ? true : false;
+    print(index);
+    setState(() {
+      isBookMark =news[index].isBookmark == 1 ? true : false;
+    });
     pageNumber=index;
     _controller = PageController(
       initialPage: index,
@@ -48,7 +51,7 @@ class _DetailPageState extends AppScreenState<DetailPage> {
     return BlocConsumer<DetailCubit, DetailState>(
         listener: (context, state) {
       if (state.isNewsFailure) showSnackBar(state.errorMessage);
-      //if (state.isNewsFailure) showSnackBar(state.errorMessage);
+      if (state.isbookmark) showSnackBar(state.errorMessage);
 
     },
     builder: (context, state) {
@@ -59,10 +62,10 @@ class _DetailPageState extends AppScreenState<DetailPage> {
           PageView(
               scrollDirection: Axis.vertical,
               onPageChanged: (page) {
-                print("page>> " + page.toString());
-                pageNumber=page;
+                print("page>> " + page.toString()+"++"+index.toString());
                 setState(() {
-                  isBookMark = news[page].isBookmark == '1' ? true : false;
+                  isBookMark = news[page].isBookmark == 1 ? true : false;
+                  print(isBookMark);
                 });
 
               },
@@ -92,13 +95,11 @@ class _DetailPageState extends AppScreenState<DetailPage> {
                                     "yyyy-MM-dd hh:mm:ss")
                                     .parse(item.newsDate)),
                                 style: TextStyle(
-                                  // color: Colors.black45,
                                     fontWeight: FontWeight.w500),
                               ),
                               Text(
                                 "",
                                 style: TextStyle(
-                                  // color: Colors.black45,
                                     fontWeight: FontWeight.w500),
                               ),
                             ],
@@ -155,25 +156,16 @@ class _DetailPageState extends AppScreenState<DetailPage> {
                                             side: BorderSide(color: AppColors.primaryColor)))),
                                 onPressed: ()  {
                                   if(item.newsSource.contains('.pdf')){
-                                    // _launchURL(item.newsSource)
-
-
-                                   // Get.to(PdfViewer(url: item.newsSource, title: item.newsTitle))
                                     final _bundle = Bundle()
                                       ..put('newsSource',item.newsSource)
                                       ..put('title', item.newsTitle);
-                                    navigateToScreenAndReplace(Screen.webview,_bundle);
+                                    navigateToScreen(Screen.pdfview,_bundle);
                                   }else{
-                                    //Get.to(PdfViewer(url: item.newsSource));
-                                    ///Get.to(WebViewMain(url: item.newsSource, title: item.newsTitle))
                                     final _bundle = Bundle()
                                        ..put('newsSource',item.newsSource)
                                        ..put('title', item.newsTitle);
-                                    navigateToScreenAndReplace(Screen.pdfview,_bundle);
-
+                                    navigateToScreen(Screen.webview,_bundle);
                                   }
-
-
                                 }),
                           )
                         ],
@@ -217,9 +209,6 @@ class _DetailPageState extends AppScreenState<DetailPage> {
                               isBookMark = (isBookMark == true) ? false : true;
                             });
                             _cubit.updateBookmark(news[pageNumber].newsId,isBookMark?1:0);
-                           /* homeController.bookmark(
-                                widget.news[pageNumber].newsId,
-                                isBookMark ? 1 : 0);*/
                           },
                           child: Icon(
                             isBookMark
@@ -232,7 +221,6 @@ class _DetailPageState extends AppScreenState<DetailPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          // Share.share('check out my website https://example.com');
                           Share.share('To update yourself with business TINY. Download Biz7 - https://play.google.com/store/apps/details?id=com.biz_app.biz_app');
                         },
                         child: Padding(

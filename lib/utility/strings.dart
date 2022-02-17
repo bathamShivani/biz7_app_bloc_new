@@ -1,7 +1,7 @@
 
 class StringConst {
   // API STRINGS
-  static const String BASE_URL = "http://news.apoliums.com/";
+  static const String BASE_URL = "https://biz7.app/assets/frontend/profile_pic/";
 
   static LABEL label = const LABEL();
   static SENTENCE sentence = const SENTENCE();

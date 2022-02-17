@@ -30,11 +30,6 @@ List<SettingItem> settingItems = [
     textColor: AppColors.greyShade3,
     routeName: '',
   ),
-  /*SettingItem(
-    title: StringConst.sentence.FAQ,
-    textColor: AppColors.greyShade3,
-    routeName: '',
-  ),*/
   SettingItem(
     title: StringConst.sentence.LOGOUT,
     textColor: AppColors.greyShade3,

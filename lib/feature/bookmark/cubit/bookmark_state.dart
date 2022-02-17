@@ -26,7 +26,6 @@ class BookmarkState extends Equatable {
 
       errorMessage,
       news,isNewsLoading,isNewsFailure,isErrorMessage
-
     ];
   }
 

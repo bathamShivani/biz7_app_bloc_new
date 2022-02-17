@@ -19,6 +19,8 @@ class DetailCubit extends Cubit<DetailState> {
 
 
   Future<void> updateBookmark(news_id, is_bookmark) async {
+    emit(state.copyWith(isNewsLoading : true,isbookmark: false));
+
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     final response = await _dataHelper.apiHelper.updateBookmark(news_id, is_bookmark, result.data.id);
 
@@ -26,11 +28,11 @@ class DetailCubit extends Cubit<DetailState> {
     response.fold((l) {
       print('failure');
       print(l.errorMessage);
-      emit(state.copyWith(isNewsLoading : false));
+      emit(state.copyWith(isNewsLoading : false,isbookmark: false,errorMessage: l.errorMessage));
     }, (r) {
       print('success');
       print(r);
-      emit(state.copyWith(isNewsLoading : false));
+      emit(state.copyWith(isNewsLoading : false,isbookmark: true,errorMessage: r));
     });
   }
 

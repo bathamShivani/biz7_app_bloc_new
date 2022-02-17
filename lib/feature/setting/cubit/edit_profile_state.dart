@@ -15,31 +15,9 @@ class EditProfileState extends Equatable {
     this.errorMessage = '',
     this.isNumberValid = false,
     this.isOtpValid = false,
-    //this.signUpStage = SignUpStage.sendOtp,
+    this.ispicupdate = false,
   });
-  // factory EditProfileState.empty() {
-  //   return EditProfileState(
-  //     isNameValid: false,
-  //     isEmailValid: false,
-  //     isPasswordValid: false,
-  //     isNumberValid: false,
-  //     isSubmitting: false,
-  //     isSuccess: false,
-  //     isFailure: false,
-  //     errorMessage: '',
-  //     signUpStage: SignUpStage.sendOtp,
-  //   );
-  // }
-  // factory EditProfileState.loading() {
-  //   return EditProfileState(
-  //       isNameValid: true,
-  //       isEmailValid: true,
-  //       isPasswordValid: true,
-  //       isSubmitting: true,
-  //       isSuccess: false,
-  //       isFailure: false,
-  //       errorMessage: '');
-  // }
+
   factory EditProfileState.failure(String errorMessage) {
     return EditProfileState(
       isfNameValid: true,
@@ -48,21 +26,13 @@ class EditProfileState extends Equatable {
       isEmailValid: true,
       isSubmitting: false,
       isSuccess: false,
+      ispicupdate: false,
       isFailure: true,
       errorMessage: errorMessage,
     );
   }
 
-  // factory EditProfileState.success() {
-  //   return EditProfileState(
-  //       isNameValid: true,
-  //       isEmailValid: true,
-  //       isPasswordValid: true,
-  //       isSubmitting: false,
-  //       isSuccess: true,
-  //       isFailure: false,
-  //       errorMessage: '');
-  // }
+
   final bool? islNameValid;
   final bool? isfNameValid;
   final bool? isAddressValid;
@@ -72,6 +42,7 @@ class EditProfileState extends Equatable {
   final bool? isSubmitting;
   final bool? isSuccess;
   final bool? isFailure;
+  final bool? ispicupdate;
   final String? errorMessage;
 
   bool get isMobileValid => isNumberValid!;
@@ -87,6 +58,7 @@ class EditProfileState extends Equatable {
     bool? isPasswordValid,
     bool? isNumberValid,
     bool? isOtpValid,
+    bool? ispicupdate,
   }) {
     return copyWith(
       isfNameValid: isfNameValid,
@@ -99,6 +71,7 @@ class EditProfileState extends Equatable {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      ispicupdate: false,
     );
   }
 
@@ -113,6 +86,7 @@ class EditProfileState extends Equatable {
     bool? isSubmitting,
     bool? isSuccess,
     bool? isFailure,
+    bool? ispicupdate,
     SignUpStage? signUpStage,
     String? errorMessage,
   }) {
@@ -126,7 +100,7 @@ class EditProfileState extends Equatable {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
-     // signUpStage: signUpStage ?? this.signUpStage,
+      ispicupdate: ispicupdate ?? this.ispicupdate,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
@@ -141,6 +115,7 @@ class EditProfileState extends Equatable {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      ispicupdate: $ispicupdate,
     }''';
   }
 
@@ -156,5 +131,6 @@ class EditProfileState extends Equatable {
     isNumberValid!,
     errorMessage!,
     isOtpValid!,
+    ispicupdate!,
   ];
 }
