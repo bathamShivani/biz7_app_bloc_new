@@ -156,7 +156,7 @@ abstract class AppScreenState<WIDGET extends AppScreen> extends State<WIDGET>
   }
 
   bool onBackPressed() {
-    return false;
+    return true;
   }
 
   void onBackResult(Object? bundle) {}

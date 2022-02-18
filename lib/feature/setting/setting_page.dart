@@ -3,6 +3,7 @@ import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
 import 'package:biz_app_bloc/utility/adaptive.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/shadows.dart';
@@ -11,6 +12,7 @@ import 'package:biz_app_bloc/utility/spaces.dart';
 import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:biz_app_bloc/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:bloc/bloc.dart';
 
 class SettingItem {
   SettingItem({
@@ -147,6 +149,14 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
         ));
     throw UnimplementedError();
   }
+
+  @override
+  bool onBackPressed() {
+    // TODO: implement onBackPressed
+    return true;
+
+  }
+
 }
 
 class DividerGrey extends StatelessWidget {

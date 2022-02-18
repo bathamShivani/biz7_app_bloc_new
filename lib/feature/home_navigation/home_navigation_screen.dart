@@ -1,4 +1,3 @@
-
 import 'package:animations/animations.dart';
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
@@ -8,6 +7,7 @@ import 'package:biz_app_bloc/feature/setting/setting_page.dart';
 import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
 import 'package:biz_app_bloc/feature/home/home_page.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
+import 'package:biz_app_bloc/utility/sizes.dart';
 import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,6 +18,7 @@ class HomeNavigationScreen extends AppScreen {
   HomeNavigationScreen(
       {RouteObserver<Route>? routeObserver, Key? key, Bundle? arguments})
       : super(routeObserver, key, arguments);
+
   @override
   _HomeNavigationScreenState createState() => _HomeNavigationScreenState();
 }
@@ -28,7 +29,6 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
   late HomeNavigationCubit _cubit;
   late HomePageCubit _homePageCubit;
   late BookmarkCubit _bookmarkCubit;
-
 
   @override
   void onInit() {
@@ -42,19 +42,16 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
         icon: _getBottomBarIcons(FontAwesomeIcons.home, false),
         activeIcon: _getBottomBarIcons(FontAwesomeIcons.home, true),
       ),
-
       BottomNavigationBarItem(
         label: StringConst.BOOKMARK,
         icon: _getBottomBarIcons(FontAwesomeIcons.bookmark, false),
         activeIcon: _getBottomBarIcons(FontAwesomeIcons.bookmark, true),
       ),
-
-        BottomNavigationBarItem(
-          label: StringConst.SETTING,
-          icon: _getBottomBarIcons(FontAwesomeIcons.slidersH, false),
-          activeIcon: _getBottomBarIcons(FontAwesomeIcons.slidersH, true),
-        ),
-
+      BottomNavigationBarItem(
+        label: StringConst.SETTING,
+        icon: _getBottomBarIcons(FontAwesomeIcons.slidersH, false),
+        activeIcon: _getBottomBarIcons(FontAwesomeIcons.slidersH, true),
+      ),
     ];
     _bodyWidgets = [
       BlocProvider.value(
@@ -77,7 +74,6 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
     );
   }
 
-
   @override
   Widget? bottomNavigator() {
     final TextStyle unselectedLabelStyle = TextStyle(
@@ -94,19 +90,38 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
     return BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
       builder: (context, state) {
         if (state is HomeNavigationIndexState)
-          return BottomNavigationBar(
-            items: _navBarItems,
-            onTap: _cubit.switchBottomNavIndex,
-            currentIndex: state.index,
-            elevation: 16,
-            backgroundColor: Colors.white,
-            unselectedItemColor: Colors.black.withOpacity(0.5),
-            selectedItemColor: Colors.black,
-            unselectedLabelStyle: unselectedLabelStyle,
-            selectedLabelStyle: selectedLabelStyle,
-            type: BottomNavigationBarType.fixed,
-            showUnselectedLabels: true,
-          );
+          return SizedBox(
+              height: Sizes.HEIGHT_80,
+              child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30)),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black38,
+                          spreadRadius: 0,
+                          blurRadius: 10),
+                    ],
+                  ),
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                      child: BottomNavigationBar(
+                        items: _navBarItems,
+                        onTap: _cubit.switchBottomNavIndex,
+                        currentIndex: state.index,
+                        elevation: 10,
+                        backgroundColor: Colors.white,
+                        unselectedItemColor: Colors.black.withOpacity(0.5),
+                        selectedItemColor: Colors.black,
+                        unselectedLabelStyle: unselectedLabelStyle,
+                        selectedLabelStyle: selectedLabelStyle,
+                       // type: BottomNavigationBarType.fixed,
+                        showUnselectedLabels: true,
+                      ))));
         else
           throw UnimplementedError();
       },

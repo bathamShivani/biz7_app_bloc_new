@@ -4,7 +4,7 @@ import 'package:biz_app_bloc/feature/home/detail/detailpage.dart';
 import 'package:biz_app_bloc/feature/home/pdfviewer.dart';
 import 'package:biz_app_bloc/feature/home/web_view.dart';
 import 'package:biz_app_bloc/feature/home_navigation/cubit/homenavigation_cubit.dart';
-import 'package:biz_app_bloc/feature/home_navigation/home.dart';
+import 'package:biz_app_bloc/feature/home_navigation/home_navigation_screen.dart';
 import 'package:biz_app_bloc/feature/login/bloc/login_bloc.dart';
 import 'package:biz_app_bloc/feature/login/login_page.dart';
 import 'package:biz_app_bloc/feature/setting/cubit/edit_profile_bloc.dart';
@@ -91,7 +91,7 @@ class Router {
             builder: (_) =>
                 BlocProvider(
                   create: (context) => LoginBloc(),
-                  child: PdfViewer(
+                  child: PdfFileScreen(
                       arguments: settings.arguments != null
                           ? settings.arguments as Bundle
                           : null),

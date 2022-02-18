@@ -137,6 +137,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                       (_image != null)
                           ? CircleAvatar(
                               radius: kSpacingUnit * 5,
+
                               backgroundColor:
                                   _image != null ? Colors.green : Colors.red,
                               backgroundImage: new FileImage(_image!))
@@ -146,9 +147,9 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                   : '',
                               radius: kSpacingUnit * 5,
                               // sets radius, default 50.0
-                              backgroundColor: Colors.transparent,
+                              backgroundColor: Colors.white,
                               // sets background color, default Colors.white
-                              borderWidth: 2,
+                              borderWidth: 1,
 
                               placeHolder: (context, url) => Container(
                                 width: 50,
@@ -159,8 +160,8 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                   Image.asset(ImagePath.profile),
 
                               borderColor: profile_image != null
-                                  ? Colors.green
-                                  : AppColors.red,
+                                  ? Colors.red
+                                  : Colors.green,
                               elevation: 4.0,
                               foregroundColor: AppColors.white.withOpacity(0.5),
                               cacheImage: true,

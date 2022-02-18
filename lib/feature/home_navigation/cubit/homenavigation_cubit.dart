@@ -9,5 +9,6 @@ class HomeNavigationCubit extends Cubit<HomeNavigationState> {
   void switchBottomNavIndex(int index) {
     if (index != (state as HomeNavigationIndexState).index)
       emit(HomeNavigationIndexState(index));
+
   }
 }
