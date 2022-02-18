@@ -25,9 +25,6 @@ class HomePage extends AppScreen {
 class _HomePageState extends AppScreenState<HomePage> {
   final _scrollController = ScrollController();
   late HomePageCubit _cubit;
-  String name = '';
-  String selectedEventName = '';
-  int selectedEventindex = -1;
   final DateFormat formatter = DateFormat('dd MMM, yyyy');
 
   @override

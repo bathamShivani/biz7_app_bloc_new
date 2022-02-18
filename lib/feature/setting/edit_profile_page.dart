@@ -154,14 +154,14 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                               placeHolder: (context, url) => Container(
                                 width: 50,
                                 height: 50,
-                                child: Image.asset(ImagePath.PLACEHOLDER),
+                                child: Image.asset(ImagePath.profile),
                               ),
                               errorWidget: (context, url, errror) =>
                                   Image.asset(ImagePath.profile),
 
                               borderColor: profile_image != null
-                                  ? Colors.red
-                                  : Colors.green,
+                                  ? Colors.green
+                                  : Colors.red,
                               elevation: 4.0,
                               foregroundColor: AppColors.white.withOpacity(0.5),
                               cacheImage: true,

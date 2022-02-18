@@ -53,8 +53,7 @@ dependencies:
   share: ^2.0.4
   circular_profile_avatar: ^2.0.5
   image_picker: ^0.7.0
-  advance_pdf_viewer: any
-
+  advance_pdf_viewer: ^2.0.1
 
 
 

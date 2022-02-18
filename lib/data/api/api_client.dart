@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:biz_app_bloc/data/api/api_helper.dart';
 import 'package:biz_app_bloc/utility/internet_check.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:http/io_client.dart';
+
 
 
 class ApiClient {
@@ -12,6 +15,10 @@ class ApiClient {
     print(
       path,
     );
+    HttpClient httpClient = new HttpClient();
+
+    httpClient.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
     final response = await http.get(
       Uri.parse(ApiEndPoints.BASE_URL+path),
       headers: {
@@ -32,7 +39,13 @@ class ApiClient {
    // if (await _connectivity.check()) {
       print('${ApiEndPoints.BASE_URL}$path');
       print('body' + json.encode(body));
-      final response = await http.post(Uri.parse(ApiEndPoints.BASE_URL+path),
+      HttpClient httpClient = new HttpClient();
+
+      httpClient.badCertificateCallback =
+      ((X509Certificate cert, String host, int port) => true);
+      IOClient ioClient = new IOClient(httpClient);
+
+      final response = await ioClient.post(Uri.parse(ApiEndPoints.BASE_URL+path),
           headers: {
             'Content-Type': 'application/json',
             //'Authorization': token != null ? 'Bearer ${token}' : null

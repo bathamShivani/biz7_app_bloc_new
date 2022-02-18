@@ -30,12 +30,14 @@ class _PdfFileScreenState extends AppScreenState<PdfFileScreen> {
   void onInit() {
     link = widget.arguments?.get('newsSource');
     fileName = widget.arguments?.get('title');
+    _getDocument();
     super.onInit();
   }
 
   Future<PDFDocument> _getDocument() async {
-    File file = File(link);
-    return await PDFDocument.fromFile(file);
+    //File file = File(link);
+   // print(file);
+    return await PDFDocument.fromURL(link);
   }
 
   @override
@@ -43,18 +45,18 @@ class _PdfFileScreenState extends AppScreenState<PdfFileScreen> {
     return widget.showAppBar
         ? AppBar(
       title: Text(
-        fileName ?? 'PDF',
+       fileName??'PDF',
         style: Theme.of(context)
             .textTheme
             .button
-            ?.copyWith(color: Theme.of(context).primaryColor),
-        maxLines: 2,
+            ?.copyWith(color: Colors.white),
+        maxLines: 1,
+
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
       ),
       centerTitle: true,
-    )
-        : null;
+    ):null;
   }
 
   @override

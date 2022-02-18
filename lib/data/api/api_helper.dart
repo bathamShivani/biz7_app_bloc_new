@@ -112,12 +112,10 @@ class ApiHelperImpl extends ApiHelper {
         "page": page, "category_ids": categories, "user_id": user_id,"search_txt":search_text
       });
 
-
-
       if(!response['error']){
         return Right(NewsCategory.fromJson(response));
       }else{
-return Left(throw new CustomException(200,response['msg'],"'"));
+        return Left(throw new CustomException(200,response['msg'],"'"));
       }
 
     } on CustomException catch (e) {
