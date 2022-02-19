@@ -41,28 +41,16 @@ class _SplashScreenState extends AppScreenState<SplashScreen>
     return BlocListener<SplashCubit, SplashState>(
       listener: (context, state) {
         if (state is LoggedInState)
-          Future.delayed(const Duration(seconds: 5), () {
+          Future.delayed(const Duration(seconds: 2), () {
             state.isLoggedIn
                 ? navigateToScreenAndReplace(Screen.home)
                 : navigateToScreenAndReplace(Screen.login);
           });
       },
       child: Container(
-          width: 0.0,
-          height: 0.0,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const Spacer(),
-              Container(
-                width: 0.0,
-                height: 45.0,
-                child: Image.asset('assets/images/splash.png'),
-              ),
-              const Spacer(),
-            ],
-          )),
+        height: double.infinity,
+        width: double.infinity,
+          child: Image.asset('assets/images/splash.png',fit: BoxFit.fitHeight,)),
     );
   }
 }

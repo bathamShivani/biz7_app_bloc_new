@@ -2,6 +2,7 @@ import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/data/api/api_helper.dart';
+import 'package:biz_app_bloc/feature/home/cubit/home_page_cubit.dart';
 import 'package:biz_app_bloc/feature/home/detail/cubit/detail_cubit.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
@@ -10,6 +11,7 @@ import 'package:biz_app_bloc/utility/spaces.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:share/share.dart';
 
 class DetailPage extends AppScreen {
@@ -28,13 +30,14 @@ class _DetailPageState extends AppScreenState<DetailPage> {
   late final List<Datum> news;
   late final int index;
   late DetailCubit _cubit;
+  late HomePageCubit _homecubit;
 
   @override
   void onInit() {
     _cubit = BlocProvider.of<DetailCubit>(context);
+    _homecubit = BlocProvider.of<HomePageCubit>(context);
     news = widget.arguments?.get('news');
     index = widget.arguments?.get('index');
-    print(index);
     setState(() {
       isBookMark =news[index].isBookmark == 1 ? true : false;
     });
@@ -59,123 +62,134 @@ class _DetailPageState extends AppScreenState<DetailPage> {
       backgroundColor: AppColors.white,
       body: Stack(
         children: [
-          PageView(
-              scrollDirection: Axis.vertical,
-              onPageChanged: (page) {
-                print("page>> " + page.toString()+"++"+index.toString());
-                setState(() {
-                  isBookMark = news[page].isBookmark == 1 ? true : false;
-                  print(isBookMark);
-                });
+    BlocConsumer<HomePageCubit, HomePageState>(
+    listener: (context, state) {
+    // TODO: implement listener
+    },
+    builder: (context, state) {
+         return LazyLoadScrollView(
+            onEndOfPage: () => {
+              if(state.isReloading)
+              _homecubit.fetchnews(state.page+1),
+            },
+            child: PageView(
+                scrollDirection: Axis.vertical,
+                onPageChanged: (page) {
+                  print("page>> " + page.toString()+"++"+index.toString());
+                  setState(() {
+                    isBookMark = news[page].isBookmark == 1 ? true : false;
+                  });
 
-              },
-              controller: _controller,
-              children: news
-                  .map((item) => SingleChildScrollView(
-                child: Column(
-                  children: [
-                    FadeInImage.assetNetwork(
-                      height: 300,
-                      placeholder: ImagePath.PLACEHOLDER,
-                      image: ApiEndPoints.BASE_IMAGE_URL + item.bigImg,
-                      fit: BoxFit.fitHeight,
-                    ),
-                    SpaceH12(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                formatter.format(new DateFormat(
-                                    "yyyy-MM-dd hh:mm:ss")
-                                    .parse(item.newsDate)),
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              Text(
-                                "",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ],
-                          ),
-                          SpaceH12(),
-                          Text(
-                            item.newsTitle,
-                            style: Theme.of(context)
-                                .textTheme
-                                .subtitle1!
-                                .copyWith(
-                              fontWeight: FontWeight.bold,
+                },
+                controller: _controller,
+                children: news
+                    .map((item) => SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      FadeInImage.assetNetwork(
+                        height: 300,
+                        placeholder: ImagePath.PLACEHOLDER,
+                        image: ApiEndPoints.BASE_IMAGE_URL + item.bigImg,
+                        fit: BoxFit.fitHeight,
+                      ),
+                      SpaceH12(),
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 16.0, vertical: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  formatter.format(new DateFormat(
+                                      "yyyy-MM-dd hh:mm:ss")
+                                      .parse(item.newsDate)),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  "",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ],
                             ),
-                          ),
-                          SpaceH12(),
-                          Text(
-                            item.newsDescription,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(
-                              fontWeight: FontWeight.w200,
+                            SpaceH12(),
+                            Text(
+                              item.newsTitle,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          SpaceH12(),
-                          Center(
-                            child: ElevatedButton(
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 48.0, vertical: 10.0),
-                                  child: Text(
-                                    "Continue Reading".toUpperCase(),
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .subtitle1!
-                                        .copyWith(
-                                      color: AppColors.white,
+                            SpaceH12(),
+                            Text(
+                              item.newsDescription,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                fontWeight: FontWeight.w200,
+                              ),
+                            ),
+                            SpaceH12(),
+                            Center(
+                              child: ElevatedButton(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 48.0, vertical: 10.0),
+                                    child: Text(
+                                      "Continue Reading".toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle1!
+                                          .copyWith(
+                                        color: AppColors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                style: ButtonStyle(
-                                    foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                    backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        AppColors.primaryColor),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                            BorderRadius.circular(
-                                                30),
-                                            side: BorderSide(color: AppColors.primaryColor)))),
-                                onPressed: ()  {
-                                  if(item.newsSource.contains('.pdf')){
-                                    final _bundle = Bundle()
-                                      ..put('newsSource',item.newsSource)
-                                      ..put('title', item.newsTitle);
-                                    navigateToScreen(Screen.pdfview,_bundle);
-                                  }else{
-                                    final _bundle = Bundle()
-                                       ..put('newsSource',item.newsSource)
-                                       ..put('title', item.newsTitle);
-                                    navigateToScreen(Screen.webview,_bundle);
-                                  }
-                                }),
-                          )
-                        ],
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                      backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          AppColors.primaryColor),
+                                      shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                          RoundedRectangleBorder(
+                                              borderRadius:
+                                              BorderRadius.circular(
+                                                  30),
+                                              side: BorderSide(color: AppColors.primaryColor)))),
+                                  onPressed: ()  {
+                                    if(item.newsSource.contains('.pdf')){
+                                      final _bundle = Bundle()
+                                        ..put('newsSource',item.newsSource)
+                                        ..put('title', item.newsTitle);
+                                      navigateToScreen(Screen.pdfview,_bundle);
+                                    }else{
+                                      final _bundle = Bundle()
+                                         ..put('newsSource',item.newsSource)
+                                         ..put('title', item.newsTitle);
+                                      navigateToScreen(Screen.webview,_bundle);
+                                    }
+                                  }),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    SpaceH12(),
-                  ],
-                ),
-              ))
-                  .toList()),
+                      SpaceH12(),
+                    ],
+                  ),
+                ))
+                    .toList()),
+          );
+    }),
           new Container(
             color: Colors.black12,
             child: Row(

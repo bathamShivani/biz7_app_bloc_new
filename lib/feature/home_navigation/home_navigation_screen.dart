@@ -29,6 +29,7 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
   late HomeNavigationCubit _cubit;
   late HomePageCubit _homePageCubit;
   late BookmarkCubit _bookmarkCubit;
+  int current_index=0;
 
   @override
   void onInit() {
@@ -90,6 +91,7 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
     return BlocBuilder<HomeNavigationCubit, HomeNavigationState>(
       builder: (context, state) {
         if (state is HomeNavigationIndexState)
+
           return SizedBox(
               height: Sizes.HEIGHT_80,
               child: Container(
@@ -112,6 +114,7 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
                       child: BottomNavigationBar(
                         items: _navBarItems,
                         onTap: _cubit.switchBottomNavIndex,
+
                         currentIndex: state.index,
                         elevation: 10,
                         backgroundColor: Colors.white,
@@ -147,5 +150,10 @@ class _HomeNavigationScreenState extends AppScreenState<HomeNavigationScreen> {
           throw UnimplementedError();
       },
     );
+  }
+  @override
+  bool onBackPressed() {
+
+    return super.onBackPressed();
   }
 }

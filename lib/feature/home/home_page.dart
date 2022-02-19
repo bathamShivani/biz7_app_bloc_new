@@ -26,6 +26,7 @@ class _HomePageState extends AppScreenState<HomePage> {
   final _scrollController = ScrollController();
   late HomePageCubit _cubit;
   final DateFormat formatter = DateFormat('dd MMM, yyyy');
+  TextEditingController _search=new TextEditingController();
 
   @override
   void onInit() {
@@ -80,15 +81,22 @@ class _HomePageState extends AppScreenState<HomePage> {
                       child: Padding(
                         padding: EdgeInsets.only(top: 10, left: 16, right: 16),
                         child: TextField(
+                          controller: _search,
                           decoration: InputDecoration(
                             hintText: StringConst.sentence.Search,
                             hintStyle: TextStyle(color: Colors.grey.shade600),
 
-                            suffixIcon: new Container(
-                              height: 20,
-                              child: FaIcon(
-                                FontAwesomeIcons.search,
-                                color: AppColors.grey,
+                            suffixIcon: InkWell(
+                              onTap: (){
+                                _cubit.fetchnews(0,
+                                    catID: state.selectedCatId,searchText:_search.text);
+                              },
+                              child: new Container(
+                                height: 10,
+                                child: FaIcon(
+                                  FontAwesomeIcons.search,
+                                  color: Colors.black,
+                                ),
                               ),
                             ),
                             filled: true,

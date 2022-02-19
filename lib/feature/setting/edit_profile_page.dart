@@ -72,9 +72,10 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
     emailController.text = result.data.email;
     dobController.text = result.data.dob;
     addressController.text = result.data.address;
-    genderController.text = result.data.gender;
+    genderController.text = (result.data.gender=='')?'Male':result.data.gender;
     profile_image = result.data.profileImage;
-    select = result.data.gender;
+    select = (result.data.gender=='')?'Male':result.data.gender;
+
   }
 
   void _onfNameChanged() {
@@ -342,9 +343,6 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                               side: BorderSide(
                                                   color: AppColors.primaryColor)))),
                                   onPressed: () {
-                                    if (select != null) {
-                                      print('select gender' + select);
-                                      genderController.text = select;
                                       editPageBloc.updateProfile(
                                           fnameController.text,
                                           lnameController.text,
@@ -352,13 +350,7 @@ class _ProfileScreenState extends AppScreenState<ProfileScreen> {
                                           genderController.text,
                                           emailController.text,
                                           addressController.text);
-                                    } else {
-                                      ScaffoldMessenger.of(
-                                              globalKey.currentContext!)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  'Please select gender')));
-                                    }
+
                                   })
                               : Center(
                                   child: CircularProgressIndicator(

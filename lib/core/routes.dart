@@ -78,8 +78,14 @@ class Router {
       case Screen.detail:
         return MaterialPageRoute(
             builder: (_) =>
+                MultiBlocProvider(
+                    providers: [
+                      BlocProvider.value(
+                        value: _categoryCubit,
+                      ),
                 BlocProvider(
-                  create: (context) => DetailCubit(),
+                  create: (context) => DetailCubit(),)
+                  ],
                   child: DetailPage(
                       arguments: settings.arguments != null
                           ? settings.arguments as Bundle

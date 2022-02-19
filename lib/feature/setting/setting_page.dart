@@ -86,7 +86,7 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
               ),
               borderColor: Colors.white,
               width: widthOfScreen,
-              height: heightOfScreen * 0.7,
+              height: heightOfScreen,
               borderRadius: const BorderRadius.all(
                 const Radius.circular(Sizes.RADIUS_10),
               ),
@@ -111,7 +111,6 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            // mainAxisSize: MainAxisSize.min,
                             children: [
                               Padding(
                                   padding: const EdgeInsets.only(
@@ -147,15 +146,9 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
             ),
           ],
         ));
-    throw UnimplementedError();
   }
 
-  @override
-  bool onBackPressed() {
-    // TODO: implement onBackPressed
-    return true;
 
-  }
 
 }
 
@@ -164,7 +157,6 @@ class DividerGrey extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       color: AppColors.grey,
-      // height: ,
     );
   }
 }
