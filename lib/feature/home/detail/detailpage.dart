@@ -31,13 +31,14 @@ class _DetailPageState extends AppScreenState<DetailPage> {
   late final int index;
   late DetailCubit _cubit;
   late HomePageCubit _homecubit;
-
+String search='';
   @override
   void onInit() {
     _cubit = BlocProvider.of<DetailCubit>(context);
     _homecubit = BlocProvider.of<HomePageCubit>(context);
     news = widget.arguments?.get('news');
     index = widget.arguments?.get('index');
+    search = widget.arguments?.get('search');
     setState(() {
       isBookMark =news[index].isBookmark == 1 ? true : false;
     });
@@ -70,7 +71,7 @@ class _DetailPageState extends AppScreenState<DetailPage> {
          return LazyLoadScrollView(
             onEndOfPage: () => {
               if(state.isReloading)
-              _homecubit.fetchnews(state.page+1),
+              _homecubit.fetchnews(state.page+1,searchText: search,catID: state.selectedCatId),
             },
             child: PageView(
                 scrollDirection: Axis.vertical,

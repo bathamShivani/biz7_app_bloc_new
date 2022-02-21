@@ -55,22 +55,48 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   Future<void> fetchnews(int page, {int catID=11 ,String searchText=""}) async {
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
-    emit(state.copyWith(isNewsLoading: true));
+
+
+    if(page==0){
+      emit(state.copyWith(isNewsLoading: true,news:newslist));
+    }else{
+      emit(state.copyWith(isNewsLoading: true));
+    }
+
+
+
     final response = await _dataHelper.apiHelper.executeNews(  page, [catID],result.data.id, searchText);
 
     response.fold((l) async {
-      emit(state.copyWith(
-        isNewsFailure: true,
-        errorMessage: l.errorMessage,
-        isNewsLoading: false,
-        page: page,
-        news: newslist,
-        selectedCatId: catID
-      ));
-      emit(state.copyWith(
-        isNewsFailure: false,
-          page: page
-      ));
+
+      if(state.news==null ||state.news.length==0||page==0){
+
+
+        emit(state.copyWith(
+            isNewsFailure: true,
+            errorMessage: l.errorMessage,
+            isNewsLoading: false,
+            page: page,
+            news: newslist,
+            selectedCatId: catID
+        ));
+
+
+      }else if(state.news!=null &&state.news.length!=0&&page!=0){
+
+        emit(
+          state.copyWith(
+
+            isNewsLoading: false,
+            page: page,
+            isReloading:false,
+            selectedCatId: catID,
+            isNewsFailure: false,
+
+          ),
+        );
+
+      }
     }, (r) async {
       if (r.data.isEmpty)
         emit(state.copyWith(

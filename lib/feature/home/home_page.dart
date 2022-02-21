@@ -88,6 +88,7 @@ class _HomePageState extends AppScreenState<HomePage> {
 
                             suffixIcon: InkWell(
                               onTap: (){
+                                FocusManager.instance.primaryFocus?.unfocus();
                                 _cubit.fetchnews(0,
                                     catID: state.selectedCatId,searchText:_search.text);
                               },
@@ -146,9 +147,11 @@ class _HomePageState extends AppScreenState<HomePage> {
                                             padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                             child: GestureDetector(
                                               onTap: () {
-
+                                                _scrollController.initialScrollOffset;
+                                                _search.text="";
                                                 _cubit.fetchnews(0,
-                                                    catID: cat.catId);
+                                                    catID: cat.catId,searchText:_search.text);
+
                                               },
                                               child: Container(
                                                   decoration: BoxDecoration(
@@ -210,10 +213,11 @@ class _HomePageState extends AppScreenState<HomePage> {
                                       child:LazyLoadScrollView(
                                           onEndOfPage: () => {
                                             if(state.isReloading)
-                                              _cubit.fetchnews(state.page+1),
+                                              _cubit.fetchnews(state.page+1,catID:state.selectedCatId,searchText:_search.text),
                                             },
 
                                     child:  ListView.builder(
+                                        controller: _scrollController,
                                           shrinkWrap: true,
                                           itemCount: state.news.length,
                                           itemBuilder: (context, index) {
@@ -222,6 +226,8 @@ class _HomePageState extends AppScreenState<HomePage> {
                                               onTap: () {
                                                 final _bundle = Bundle()
                                                 ..put('news', state.news)
+
+                                                  ..put('search', _search.text)
                                                 ..put('index', index);
                                                 navigateToScreen(
                                                     Screen.detail,
@@ -344,7 +350,7 @@ class _HomePageState extends AppScreenState<HomePage> {
                                 ),
                               ):Expanded(
                                 child: Center(
-                                  child: new Text(state.errorMessage,
+                                  child: new Text(state.isNewsLoading?"":state.errorMessage,
                                       style: Theme.of(context).textTheme.bodyText2!.copyWith(
                                         fontWeight: FontWeight.w600,color: AppColors.red,
                                       )),

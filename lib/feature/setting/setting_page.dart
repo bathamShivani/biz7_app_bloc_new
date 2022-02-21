@@ -62,6 +62,12 @@ class _SettingScreenState extends AppScreenState<SettingScreen> {
   }
 
   @override
+  bool onBackPressed() {
+    //navigatePopUntil(Screen.home);
+    // TODO: implement onBackPressed
+    return super.onBackPressed();
+  }
+  @override
   Widget setView() {
     ThemeData theme = Theme.of(context);
     double widthOfScreen = assignWidth(context: context, fraction: 1.0);

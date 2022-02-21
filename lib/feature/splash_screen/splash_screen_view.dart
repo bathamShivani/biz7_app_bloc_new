@@ -50,7 +50,7 @@ class _SplashScreenState extends AppScreenState<SplashScreen>
       child: Container(
         height: double.infinity,
         width: double.infinity,
-          child: Image.asset('assets/images/splash.png',fit: BoxFit.fitHeight,)),
+          child: Image.asset('assets/images/splash.png',fit: BoxFit.fill,)),
     );
   }
 }
