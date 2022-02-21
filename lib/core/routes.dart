@@ -113,6 +113,7 @@ class Router {
                           ? settings.arguments as Bundle
                           : null),
                 ));
+
       case Screen.profile:
         return MaterialPageRoute(
             builder: (_) =>
