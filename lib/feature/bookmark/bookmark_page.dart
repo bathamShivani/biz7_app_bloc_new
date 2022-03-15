@@ -77,7 +77,8 @@ class _BookmarkPageState extends AppScreenState<BookmarkPage> {
                                 onTap: () {
                                   final _bundle = Bundle()
                                   ..put('news', state.news)
-                                  ..put('index', index);
+                                  ..put('index', index)
+                                    ..put('search', '');
                                   navigateToScreen(Screen.detail, _bundle
                                   );
                                 },

@@ -61,6 +61,7 @@ class UsernameEditText extends StatelessWidget {
         TextFormField(
           enabled: enabledField,
           decoration: InputDecoration(
+
             border: UnderlineInputBorder(
               borderSide: BorderSide(
                 color: borderColor,

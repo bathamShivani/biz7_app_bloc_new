@@ -23,7 +23,7 @@ class BookmarkCubit extends Cubit<BookmarkState> {
   Future<void> fetchBookmark() async {
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
     emit(state.copyWith(isNewsLoading : true));
-    final response = await _dataHelper.apiHelper.executeBookmark(0, [1],result.data.id);
+    final response = await _dataHelper.apiHelper.executeBookmark(0, [11],result.data.id);
     response.fold((l) async {
       emit(state.copyWith(
         news: newslist,
