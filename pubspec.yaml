@@ -54,7 +54,10 @@ dependencies:
   circular_profile_avatar: ^2.0.5
   image_picker: ^0.7.0
   advance_pdf_viewer: ^2.0.1
-
+  firebase_core: ^1.10.0
+  firebase_analytics: ^8.0.2
+  flutter_local_notifications: ^9.3.3
+  firebase_messaging: ^11.2.10
 
 
 

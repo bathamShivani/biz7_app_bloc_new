@@ -1,9 +1,14 @@
+
+import 'dart:io';
+
 import 'package:biz_app_bloc/core/routes.dart';
 import 'package:biz_app_bloc/feature/login/login_page.dart';
 import 'package:biz_app_bloc/utility/strings.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:biz_app_bloc/core/routes.dart' as _router;
 
+import '../utility/service/flutter_local_notification.dart';
 import 'bloc/app_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -17,6 +22,57 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  FirebaseMessaging messaging =  FirebaseMessaging.instance;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FlutterLocalNotification.initialize(context);
+    messaging = FirebaseMessaging.instance;
+    messaging.getToken().then((value) async {
+      print(value);
+      //   final prefs = await SharedPreferences.getInstance();
+      //    prefs.setString(SharedPref.PrefrenceKey.FCM_TOKEN, value);
+    });
+
+    if (Platform.isAndroid) {
+      // dynamic iosSubscription = messaging.onIosSettingsRegistered.listen((data) {});
+      messaging.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: false,
+        criticalAlert: false,
+        provisional: false,
+        sound: true,
+      );
+    }
+     _messageHandler();
+  }
+  void _messageHandler(){
+
+    //App is in Terminated state
+    FirebaseMessaging.instance.getInitialMessage().then((message){
+
+    });
+
+
+// App is in foreground state
+    FirebaseMessaging.onMessage.listen((message) {
+      if(message.notification!=null) {
+        FlutterLocalNotification.display(message);
+      }
+    });
+
+    //When App is in background state but not Terminated
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print('messageCome');
+      print(message.data.toString());
+      print(message.notification);
+      print(message.notification.toString());
+    });
+
+  }
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -37,6 +93,9 @@ class AppLanding extends StatefulWidget {
 
 class _AppLandingState extends State<AppLanding> {
   final _routes = _router.Router();
+
+
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (layoutContext, constraints) {
