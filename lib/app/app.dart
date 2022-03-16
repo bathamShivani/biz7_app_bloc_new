@@ -36,7 +36,7 @@ class _AppState extends State<App> {
       print(value);
 
 
-      await _dataHelper.cacheHelper.saveAccessToken(value.toString());
+      await _dataHelper.cacheHelper.saveFcmToken(value.toString());
     });
 
     if (Platform.isAndroid) {

@@ -31,8 +31,10 @@ class _HomePageState extends AppScreenState<HomePage> {
   @override
   void onInit() {
     _cubit = BlocProvider.of<HomePageCubit>(context)
+    ..savefcm()
       ..fetchMyCategories()
       ..fetchnews(0);
+
     super.onInit();
   }
 

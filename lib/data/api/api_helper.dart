@@ -30,6 +30,10 @@ class ApiEndPoints {
   static final String updateProfile = 'api-update-profile';
   static final String updateProfilePic = 'api-update-profile-pic';
 
+
+
+  static final String update_device_id =  'api-update-device-id';
+
 }
 
 abstract class ApiHelper {
@@ -41,6 +45,7 @@ abstract class ApiHelper {
   Future<Either<CustomException, String>> updateBookmark(int news_id, int is_bookmark,int user_id);
   Future<Either<CustomException, User>> updateProfile(int user_id, String fname,String lname,String dob,String gender,String email,String address);
   Future<Either<CustomException, User>> updateProfilePic(int user_id, path);
+  Future<Either<CustomException, String>>executeFcm(int user_id, String token);
 
 }
 
@@ -192,6 +197,25 @@ class ApiHelperImpl extends ApiHelper {
       await _api.postMultiPart(path,user_id);
       if(response["error"]==false){
         return Right(User.fromJson(response));}
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+  @override
+  Future<Either<CustomException, String>> executeFcm(user_id,token) async {
+
+    //final result = userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    try {
+      final response =
+      await _api.post( ApiEndPoints.update_device_id, {
+
+        "id":user_id,
+        "device_id":token,
+
+      });
+      if(response["error"]==false){
+        return Right(response["msg"]);}
       return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {
       return Left(e);

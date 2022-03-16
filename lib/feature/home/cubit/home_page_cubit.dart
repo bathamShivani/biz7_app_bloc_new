@@ -136,4 +136,25 @@ class HomePageCubit extends Cubit<HomePageState> {
       }
     });
   }
+
+
+  Future<void> savefcm() async {
+    final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
+    final token = await _dataHelper.cacheHelper.getFcmToken();
+    emit(state.copyWith(isCategoryLoading: true));
+    final response = await _dataHelper.apiHelper.executeFcm(result.data.id, token);
+
+    response.fold((l) async {
+      emit(state.copyWith(
+        isCategoryFailure: true,
+        errorMessage: l.errorMessage,
+        isCategoryLoading: false,
+      ));
+      emit(state.copyWith(
+        isCategoryFailure: false,
+      ));
+    }, (r) async {
+      emit(state.copyWith(isCategoryLoading: false,errorMessage:r));
+    });
+  }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:biz_app_bloc/core/app_screen.dart';
 import 'package:biz_app_bloc/core/bundle.dart';
 import 'package:biz_app_bloc/core/routes.dart';
@@ -8,10 +10,12 @@ import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/utility/colors.dart';
 import 'package:biz_app_bloc/utility/images.dart';
 import 'package:biz_app_bloc/utility/spaces.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:share/share.dart';
 
 class DetailPage extends AppScreen {
@@ -48,6 +52,50 @@ String search='';
     );
     super.onInit();
 
+  }
+  bool downloading = true;
+  String downloadingStr = "No data";
+  String savePath = "";
+  Future downloadFile(imageUrl) async {
+    try {
+      Dio dio = Dio();
+
+      String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+
+      savePath = await getFilePath(fileName+'.jpg');
+      print("savePath>>>"+savePath);
+      await dio.download(imageUrl, savePath, onReceiveProgress: (rec, total) {
+
+
+        print(""+"Downloading Image : $rec");
+        setState(() {
+          downloading = true;
+          // download = (rec / total) * 100;
+          downloadingStr =
+          "Downloading Image : $rec" ;
+
+        });
+
+
+      } );
+      setState(() {
+        downloading = false;
+        downloadingStr = "Completed";
+        Share.shareFiles([savePath], text: imageUrl,subject: 'image');
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<String> getFilePath(uniqueFileName) async {
+    String path = '';
+
+    Directory dir = await getApplicationDocumentsDirectory();
+
+    path = '${dir.path}/$uniqueFileName';
+
+    return path;
   }
 
   @override
@@ -236,7 +284,9 @@ String search='';
                       ),
                       InkWell(
                         onTap: () {
-                          Share.share('To update yourself with business TINY. Download Biz7 - https://play.google.com/store/apps/details?id=com.biz_app.biz_app');
+
+                          downloadFile("https://picsum.photos/seed/picsum/200/300");
+                         // Share.share('To update yourself with business TINY. Download Biz7 - https://play.google.com/store/apps/details?id=com.biz_app.biz_app');
                         },
                         child: Padding(
                           padding: EdgeInsets.only(top: 16.0, right: 5),
