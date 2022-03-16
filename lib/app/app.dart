@@ -7,7 +7,9 @@ import 'package:biz_app_bloc/utility/strings.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:biz_app_bloc/core/routes.dart' as _router;
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/data_helper.dart';
 import '../utility/service/flutter_local_notification.dart';
 import 'bloc/app_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +25,7 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   FirebaseMessaging messaging =  FirebaseMessaging.instance;
+  final DataHelper _dataHelper = DataHelperImpl.instance;
   @override
   void initState() {
     // TODO: implement initState
@@ -31,8 +34,9 @@ class _AppState extends State<App> {
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) async {
       print(value);
-      //   final prefs = await SharedPreferences.getInstance();
-      //    prefs.setString(SharedPref.PrefrenceKey.FCM_TOKEN, value);
+
+
+      await _dataHelper.cacheHelper.saveAccessToken(value.toString());
     });
 
     if (Platform.isAndroid) {

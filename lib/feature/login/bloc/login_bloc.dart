@@ -61,9 +61,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _loginWithCredentials(
       LoginWithCredentialsClicked event) async* {
     print('mobile');
+    final fcmToken = await DataHelperImpl.instance.cacheHelper.getFcmToken();
     yield LoginState.loading(false);
     final response = await _dataHelper.apiHelper.executeLogin(
-        event.mobile);
+        event.mobile,fcmToken);
     yield* response.fold((l) async* {
       yield LoginState.failure(l.errorMessage,false);
     },  (r) async* {
@@ -80,6 +81,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
     final id = await DataHelperImpl.instance.cacheHelper.getAccessToken();
 
+    final fcmToken = await DataHelperImpl.instance.cacheHelper.getFcmToken();
     final response =
     await _dataHelper.apiHelper.executeVerifyOtp(id, event.otp);
     yield* response.fold((l) async* {

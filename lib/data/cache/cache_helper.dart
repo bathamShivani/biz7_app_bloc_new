@@ -6,6 +6,7 @@ import 'package:biz_app_bloc/core/cache_client.dart';
 
 abstract class CacheKeys {
   static final String token = 'token';
+  static final String fcmToken = 'fcmToken';
   //User Data
   static final String userInfo = 'userInfo';
 
@@ -16,6 +17,10 @@ abstract class CacheHelper {
   Future<String> getAccessToken();
 
   Future saveAccessToken(String token);
+
+  Future<String> getFcmToken();
+
+  Future saveFcmToken(String token);
 
   Future<String> getUserInfo();
 
@@ -28,6 +33,15 @@ class CacheHelperImpl extends CacheHelper {
   CacheHelperImpl(this._cache);
 
   final CacheClient _cache;
+  @override
+  Future<String> getFcmToken() {
+    return _cache.getString(CacheKeys.fcmToken);
+  }
+
+  @override
+  Future saveFcmToken(String token) {
+    return _cache.putString(CacheKeys.fcmToken, token);
+  }
 
   @override
   Future<String> getAccessToken() {

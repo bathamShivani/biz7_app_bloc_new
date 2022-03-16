@@ -33,8 +33,8 @@ class ApiEndPoints {
 }
 
 abstract class ApiHelper {
-  Future<Either<CustomException, Login>> executeLogin(String mobile);
-  Future<Either<CustomException, User>> executeVerifyOtp(String mobile, String otp);
+  Future<Either<CustomException, Login>> executeLogin(String mobile,String fcmToken);
+  Future<Either<CustomException, User>> executeVerifyOtp(String mobile, String ot);
   Future<Either<CustomException, Category>> executeCategory();
   Future<Either<CustomException, NewsCategory>> executeNews(int page, List<int> categories,int user_id,String search_text);
   Future<Either<CustomException, NewsCategory>> executeBookmark(int page, List<int> categories,int user_id);
@@ -49,13 +49,13 @@ class ApiHelperImpl extends ApiHelper {
   final ApiClient _api;
 
   @override
-  Future<Either<CustomException, Login>> executeLogin(String mobile) async {
+  Future<Either<CustomException, Login>> executeLogin(String mobile,String fcmToken) async {
     print('mobile>>'+mobile);
     try {
       final response =
       await _api.post( ApiEndPoints.loginUrl, {
         'phone': mobile,
-        'device_id': "abc123",
+        'device_id':fcmToken,
         'let': "11.222",
         'lng': "11.333"
       });
@@ -80,6 +80,7 @@ class ApiHelperImpl extends ApiHelper {
       await _api.post( ApiEndPoints.otpUrl, {
         "id":id,
         "otp":otp
+
       });
 
       if(!response['error']){
