@@ -83,6 +83,8 @@ String search='';
         downloadingStr = "Completed";
         Share.shareFiles([savePath], text: imageUrl,subject: 'image');
       });
+
+      print(""+"Completed"+downloadingStr);
     } catch (e) {
       print(e.toString());
     }
@@ -91,9 +93,9 @@ String search='';
   Future<String> getFilePath(uniqueFileName) async {
     String path = '';
 
-    Directory dir = await getApplicationDocumentsDirectory();
+    final dir = await getExternalStorageDirectory();
 
-    path = '${dir.path}/$uniqueFileName';
+    path = '${dir!.path}/$uniqueFileName';
 
     return path;
   }
@@ -284,7 +286,8 @@ String search='';
                       ),
                       InkWell(
                         onTap: () {
-
+                        //  /data/user/0/com.biz_app.biz_app/app_flutter/300.jpg
+                          ///storage/emulated/0/Android/data/com.biz_app.biz_app/cache/share/300.jpg
                           downloadFile("https://picsum.photos/seed/picsum/200/300");
                          // Share.share('To update yourself with business TINY. Download Biz7 - https://play.google.com/store/apps/details?id=com.biz_app.biz_app');
                         },
