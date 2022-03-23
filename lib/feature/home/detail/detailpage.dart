@@ -16,7 +16,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
+
 
 class DetailPage extends AppScreen {
   DetailPage(

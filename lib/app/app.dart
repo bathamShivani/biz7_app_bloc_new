@@ -34,8 +34,6 @@ class _AppState extends State<App> {
     messaging = FirebaseMessaging.instance;
     messaging.getToken().then((value) async {
       print(value);
-
-
       await _dataHelper.cacheHelper.saveFcmToken(value.toString());
     });
 
@@ -57,23 +55,28 @@ class _AppState extends State<App> {
 
     //App is in Terminated state
     FirebaseMessaging.instance.getInitialMessage().then((message){
-
+      if(message!.data!=null) {
+        print(message.data);
+        FlutterLocalNotification.display(message);
+      }
     });
 
 
 // App is in foreground state
     FirebaseMessaging.onMessage.listen((message) {
-      if(message.notification!=null) {
+      print("onMessage");
+      if(message.data!=null) {
+        print(message.data);
         FlutterLocalNotification.display(message);
       }
     });
 
     //When App is in background state but not Terminated
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print('messageCome');
-      print(message.data.toString());
-      print(message.notification);
-      print(message.notification.toString());
+      if(message!.data!=null) {
+        print(message.data);
+        FlutterLocalNotification.display(message);
+      }
     });
 
   }

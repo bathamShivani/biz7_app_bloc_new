@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:biz_app_bloc/app/app.dart';
 import 'package:biz_app_bloc/feature/login/login_page.dart';
+import 'package:biz_app_bloc/utility/service/flutter_local_notification.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,7 +13,10 @@ import 'app/app_bloc_observer.dart';
 import 'data/data_helper.dart';
 
 Future<void> _messageHandler(RemoteMessage message) async {
-  print('background message ${message.notification?.body}');
+  if(message.data!=null) {
+    print(message.data);
+    FlutterLocalNotification.display(message);
+  }
 }
 
 Future<void> main() async {
