@@ -38,7 +38,7 @@ class _DetailPageState extends AppScreenState<DetailPage> {
 String search='';
   @override
   void onInit() {
-    _cubit = BlocProvider.of<DetailCubit>(context);
+    _cubit = BlocProvider.of<DetailCubit>(context)..fetchAdvertisement();
     _homecubit = BlocProvider.of<HomePageCubit>(context);
     news = widget.arguments?.get('news');
     index = widget.arguments?.get('index');
@@ -50,9 +50,11 @@ String search='';
     _controller = PageController(
       initialPage: index,
     );
+    mergedata();
     super.onInit();
 
   }
+
   bool downloading = true;
   String downloadingStr = "No data";
   String savePath = "";
@@ -97,7 +99,9 @@ String search='';
 
     return path;
   }
+  mergedata(){
 
+  }
   @override
   Widget setView() {
     return BlocConsumer<DetailCubit, DetailState>(
@@ -131,8 +135,7 @@ String search='';
 
                 },
                 controller: _controller,
-                children: news
-                    .map((item) => SingleChildScrollView(
+                children: news.map((item) => SingleChildScrollView(
                   child: Column(
                     children: [
                       FadeInImage.assetNetwork(

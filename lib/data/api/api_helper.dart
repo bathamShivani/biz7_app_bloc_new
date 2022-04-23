@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:biz_app_bloc/core/exceptions/custom_exception.dart';
 import 'package:biz_app_bloc/data/api/api_client.dart';
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/model/Advertisement.dart';
 import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/Login.dart';
 import 'package:biz_app_bloc/model/News.dart';
@@ -20,6 +21,7 @@ class ApiEndPoints {
   static const String BASE_URL = "https://biz7.app/";
   static const String API_KEY = "";
   static const String BASE_IMAGE_URL = "https://biz7.app/assets/news_images/";
+  static const String BASE_Advertisemnet_URL = "https://biz7.app/assets/advertisement_images/";
   // Login API Url
   static final String loginUrl = 'api-login-otp';
   static final String otpUrl = 'api-authenticate';
@@ -29,9 +31,7 @@ class ApiEndPoints {
   static final String updatebookmarkUrl = 'api-bookmark-news';
   static final String updateProfile = 'api-update-profile';
   static final String updateProfilePic = 'api-update-profile-pic';
-
-
-
+  static final String advertisemnetUrl = 'api-get-all-advertisement';
   static final String update_device_id =  'api-update-device-id';
 
 }
@@ -46,6 +46,7 @@ abstract class ApiHelper {
   Future<Either<CustomException, User>> updateProfile(int user_id, String fname,String lname,String dob,String gender,String email,String address);
   Future<Either<CustomException, User>> updateProfilePic(int user_id, path);
   Future<Either<CustomException, String>>executeFcm(int user_id, String token);
+  Future<Either<CustomException, AdvertismentModel>>executeAdvertisement();
 
 }
 
@@ -216,6 +217,20 @@ class ApiHelperImpl extends ApiHelper {
       });
       if(response["error"]==false){
         return Right(response["msg"]);}
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, AdvertismentModel>> executeAdvertisement() async {
+    try {
+      final response =
+      await _api.get( ApiEndPoints.advertisemnetUrl,);
+      if(response["error"]==false){
+        return Right(AdvertismentModel.fromJson(response));
+      }
       return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {
       return Left(e);
