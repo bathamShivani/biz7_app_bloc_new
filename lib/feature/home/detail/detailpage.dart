@@ -57,34 +57,26 @@ String search='';
   bool downloading = true;
   String downloadingStr = "No data";
   String savePath = "";
-  Future downloadFile(imageUrl) async {
+  Future downloadFile(imageUrl, description) async {
     try {
       Dio dio = Dio();
-
       String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-
       savePath = await getFilePath(fileName+'.jpg');
       print("savePath>>>"+savePath);
       await dio.download(imageUrl, savePath, onReceiveProgress: (rec, total) {
-
-
         print(""+"Downloading Image : $rec");
         setState(() {
           downloading = true;
           // download = (rec / total) * 100;
           downloadingStr =
           "Downloading Image : $rec" ;
-
         });
-
-
       } );
       setState(() {
         downloading = false;
         downloadingStr = "Completed";
-        Share.shareFiles([savePath], text: imageUrl,subject: 'image');
+        Share.shareFiles([savePath], text:description+"\n https://play.google.com/store/apps/details?id=com.biz_app.biz_app" ,subject: 'image');
       });
-
       print(""+"Completed"+downloadingStr);
     } catch (e) {
       print(e.toString());
@@ -289,7 +281,7 @@ String search='';
                         onTap: () {
                         //  /data/user/0/com.biz_app.biz_app/app_flutter/300.jpg
                           ///storage/emulated/0/Android/data/com.biz_app.biz_app/cache/share/300.jpg
-                          downloadFile("https://picsum.photos/seed/picsum/200/300");
+                          downloadFile(ApiEndPoints.BASE_IMAGE_URL +news[pageNumber].bigImg,news[pageNumber].newsDescription);
                          // Share.share('To update yourself with business TINY. Download Biz7 - https://play.google.com/store/apps/details?id=com.biz_app.biz_app');
                         },
                         child: Padding(
