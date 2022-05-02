@@ -1,4 +1,5 @@
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/model/Advertisement.dart';
 import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/model/User.dart' as info;
@@ -12,6 +13,7 @@ class DetailCubit extends Cubit<DetailState> {
   DetailCubit()
       : super(
       DetailState(
+
       )
   );
   final DataHelper _dataHelper = DataHelperImpl.instance;

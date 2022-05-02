@@ -7,7 +7,6 @@ class DetailState extends Equatable {
   final bool isNewsFailure;
   final bool isNewsLoading;
   final bool isbookmark;
-
   String errorMessage;
 
   DetailState({
@@ -15,6 +14,7 @@ class DetailState extends Equatable {
     this.isbookmark = false,
     this.isNewsLoading = true,
     this.errorMessage = '',
+
   });
   @override
   List<Object> get props {
@@ -31,12 +31,14 @@ class DetailState extends Equatable {
         bool? isNewsLoading,
         bool? isNewsFailure,
         bool? isbookmark,
+
       }) {
     return DetailState(
       errorMessage: errorMessage ?? this.errorMessage,
       isNewsLoading: isNewsLoading??this.isNewsLoading,
       isNewsFailure: isNewsFailure??this.isNewsFailure,
       isbookmark: isbookmark??this.isbookmark,
+
 
     );
   }

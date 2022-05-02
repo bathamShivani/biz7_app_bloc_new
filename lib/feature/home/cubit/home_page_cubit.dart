@@ -5,6 +5,8 @@ import 'package:biz_app_bloc/model/User.dart' as info;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+
+import '../../../model/Advertisement.dart';
 part 'HomePageState.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
@@ -13,12 +15,14 @@ class HomePageCubit extends Cubit<HomePageState> {
     HomePageState(
         category: <Data>[],
         news: <Datum>[],
+      adverlist: <AdvertismentList>[],
     )
   );
   final DataHelper _dataHelper = DataHelperImpl.instance;
   List<Data>? list = List.empty(growable: true);
   List<Datum>? newslist = List.empty(growable: true);
-
+  List<AdvertismentList>? adlist = List.empty(growable: true);
+  AdvertismentModel? advertismentModel;
   Category? _category;
   NewsCategory? _newscategory;
 
@@ -55,23 +59,15 @@ class HomePageCubit extends Cubit<HomePageState> {
 
   Future<void> fetchnews(int page, {int catID=11 ,String searchText=""}) async {
     final result = info.userFromJson(await _dataHelper.cacheHelper.getUserInfo());
-
-
     if(page==0){
       emit(state.copyWith(isNewsLoading: true,news:newslist));
     }else{
       emit(state.copyWith(isNewsLoading: true));
     }
 
-
-
     final response = await _dataHelper.apiHelper.executeNews(  page, [catID],result.data.id, searchText);
-
     response.fold((l) async {
-
       if(state.news==null ||state.news.length==0||page==0){
-
-
         emit(state.copyWith(
             isNewsFailure: true,
             errorMessage: l.errorMessage,
@@ -80,22 +76,16 @@ class HomePageCubit extends Cubit<HomePageState> {
             news: newslist,
             selectedCatId: catID
         ));
-
-
       }else if(state.news!=null &&state.news.length!=0&&page!=0){
-
         emit(
           state.copyWith(
-
             isNewsLoading: false,
             page: page,
             isReloading:false,
             selectedCatId: catID,
             isNewsFailure: false,
-
           ),
         );
-
       }
     }, (r) async {
       if (r.data.isEmpty)
@@ -107,7 +97,6 @@ class HomePageCubit extends Cubit<HomePageState> {
         ));
       else {
         _newscategory = r;
-
         if(state.news==null ||state.news.length==0||page==0){
           emit(
             state.copyWith(
@@ -120,7 +109,34 @@ class HomePageCubit extends Cubit<HomePageState> {
           );
         }else if(state.news!=null &&state.news.length!=0&&page!=0){
           List<Datum> news=  state.news;
-
+         /* if(fetchadver) {
+            for (int i = 0; i < _newscategory!.data.length; i++) {
+              if (i % 3 == 0) {
+                print('>>>>>>' + i.toString());
+                print('>>>>>>' + advertismentModel!.data.length.toString());
+                int a = (i / 3).toInt();
+                print("aaaaaaaaaaaaa>>" + a.toString());
+                _newscategory!.data.insert(i, Datum(newsId: 0,
+                    catId: 0,
+                    catName: "catName",
+                    newsTitle: "newsTitle",
+                    newsDescription: "newsDescription",
+                    smallImg: "smallImg",
+                    bigImg: "bigImg",
+                    newsSource: "newsSource",
+                    newsCountry: "newsCountry",
+                    newsFooter: "newsFooter",
+                    newsDate: "newsDate",
+                    createdDate: "createdDate",
+                    isBookmark: 0,
+                    type: 'adv',
+                    advimage: advertismentModel!.data.length > a
+                        ? advertismentModel!.data[a].advImage
+                        : advertismentModel!.data[0].advImage
+                ));
+              }
+            }
+          }*/
           news.addAll(r.data);
           emit(
             state.copyWith(
@@ -154,7 +170,54 @@ class HomePageCubit extends Cubit<HomePageState> {
         isCategoryFailure: false,
       ));
     }, (r) async {
-      emit(state.copyWith(isCategoryLoading: false,errorMessage:r));
+      emit(state.copyWith(isCategoryLoading: false,));
     });
   }
+
+  Future<void> fetchAdvertisement() async {
+    emit(state.copyWith(isAdverLoading: true));
+    final response = await _dataHelper.apiHelper.executeAdvertisement();
+
+    response.fold((l) async {
+      emit(state.copyWith(
+        isAdverFailure: true,
+        errorMessage: l.errorMessage,
+        isAdverLoading: false,
+      ));
+      emit(state.copyWith(
+        isAdverFailure: false,
+      ));
+    }, (r) async {
+      if (r.data.isEmpty) {
+        emit(state.copyWith(
+          adverlist: adlist,
+          news: newslist,
+          isAdverLoading: false,
+        ));
+      }
+      else {
+        advertismentModel = r;
+        print('>>>>>>'+_newscategory!.data.length.toString());
+       /* for (int i = 0; i < _newscategory!.data.length; i++) {
+          if (i%3==0) {
+            print('>>>>>>'+i.toString());
+            int a=(i/3).toInt();
+            print("aaaaaaaaaaaaa>>"+a.toString());
+            _newscategory!.data.insert(i,Datum(newsId: 0, catId: 0, catName: "catName", newsTitle: "newsTitle", newsDescription: "newsDescription", smallImg: "smallImg", bigImg: "bigImg", newsSource: "newsSource", newsCountry: "newsCountry", newsFooter: "newsFooter", newsDate: "newsDate", createdDate: "createdDate", isBookmark: 0,
+                type: 'adv',
+                advimage:r.data.length>a? r.data[a].advImage:r.data[0].advImage
+            ));
+          }
+        }*/
+
+        emit(
+          state.copyWith(
+            adverlist: r.data,
+            isAdverLoading: false,
+          ),
+        );
+      }
+    });
+  }
+
 }

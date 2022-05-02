@@ -36,11 +36,13 @@ class _DetailPageState extends AppScreenState<DetailPage> {
   late final int index;
   late DetailCubit _cubit;
   late HomePageCubit _homecubit;
-String search='';
+  String search='';
+  bool showadd=false;
+  int a=0;
   @override
   void onInit() {
     _cubit = BlocProvider.of<DetailCubit>(context);
-    _homecubit = BlocProvider.of<HomePageCubit>(context);
+    _homecubit = BlocProvider.of<HomePageCubit>(context)..fetchAdvertisement();
     news = widget.arguments?.get('news');
     index = widget.arguments?.get('index');
     search = widget.arguments?.get('search');
@@ -54,6 +56,7 @@ String search='';
     super.onInit();
 
   }
+
   bool downloading = true;
   String downloadingStr = "No data";
   String savePath = "";
@@ -92,7 +95,6 @@ String search='';
 
     return path;
   }
-
   @override
   Widget setView() {
     return BlocConsumer<DetailCubit, DetailState>(
@@ -113,22 +115,29 @@ String search='';
     builder: (context, state) {
          return LazyLoadScrollView(
             onEndOfPage: () => {
-              if(state.isReloading)
+              if(state.isReloading){
               _homecubit.fetchnews(state.page+1,searchText: search,catID: state.selectedCatId),
+              }
+
             },
             child: PageView(
+              padEnds: false,
                 scrollDirection: Axis.vertical,
                 onPageChanged: (page) {
                   print("page>> " + page.toString()+"++"+index.toString());
+
                   setState(() {
                     isBookMark = news[page].isBookmark == 1 ? true : false;
+                    if(page%4==0){showadd=true;
+                    a=(page/3).toInt();}
+                    else{
+                      showadd=false;
+                    }
                   });
-
                 },
                 controller: _controller,
-                children: news
-                    .map((item) => SingleChildScrollView(
-                  child: Column(
+                children: news.map((item) => SingleChildScrollView(
+                  child: !showadd?Column(
                     children: [
                       FadeInImage.assetNetwork(
                         height: 300,
@@ -229,7 +238,12 @@ String search='';
                       ),
                       SpaceH12(),
                     ],
-                  ),
+                  ):Center(
+                    child: Image.network(state.adverlist.length>a?
+                      ApiEndPoints.BASE_Advertisemnet_URL+state.adverlist[a].advImage:ApiEndPoints.BASE_Advertisemnet_URL+state.adverlist[0].advImage,
+                    fit: BoxFit.fitHeight),
+                  )
+
                 ))
                     .toList()),
           );

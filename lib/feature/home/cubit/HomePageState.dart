@@ -16,6 +16,9 @@ class HomePageState extends Equatable {
   String errorMessage;
   String searchText;
   int selectedCatId;
+  final bool isAdverFailure;
+  final bool isAdverLoading;
+  List<AdvertismentList> adverlist;
   HomePageState({
     required this.category,
     required this.news,
@@ -27,7 +30,10 @@ class HomePageState extends Equatable {
     this.page=0,
     this.searchText="",
     this.isReloading=true,
-    this.selectedCatId=1
+    this.selectedCatId=1,
+    this.isAdverFailure = false,
+    this.isAdverLoading = true,
+    required this.adverlist,
   });
   @override
   List<Object> get props {
@@ -36,7 +42,7 @@ class HomePageState extends Equatable {
       isCategoryFailure,
       isCategoryLoading,
       errorMessage,
-      news,isNewsLoading,isNewsFailure,page,searchText,  isReloading,selectedCatId
+      news,isNewsLoading,isNewsFailure,page,searchText,  isReloading,selectedCatId,isAdverFailure,isAdverLoading,adverlist
 
     ];
   }
@@ -52,7 +58,10 @@ class HomePageState extends Equatable {
         bool? isReloading,
         int? page,
         String? searchText,
-        int?selectedCatId
+        int?selectedCatId,
+        bool? isAdverFailure,
+        bool? isAdverLoading,
+        List<AdvertismentList>? adverlist,
        }) {
     return HomePageState(
         category: category ?? this.category,
@@ -65,7 +74,10 @@ class HomePageState extends Equatable {
       isReloading: isReloading??this.isReloading,
       page: page??this.page,
       searchText: searchText??this.searchText,
-        selectedCatId:selectedCatId??this.selectedCatId
+        selectedCatId:selectedCatId??this.selectedCatId,
+      isAdverFailure: isAdverFailure??this.isAdverFailure,
+      isAdverLoading: isAdverLoading??this.isAdverLoading,
+      adverlist: adverlist??this.adverlist,
     );
   }
 
