@@ -49,6 +49,8 @@ class Datum {
     required  this.newsDate,
     required  this.createdDate,
     required  this.isBookmark,
+      this.type='news',
+      this.advimage='',
   });
 
 
@@ -65,6 +67,8 @@ class Datum {
   String newsDate;
   String createdDate;
   int isBookmark;
+  String? type;
+  String? advimage;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
    
@@ -81,6 +85,8 @@ class Datum {
     newsDate: json["news_date"],
     createdDate: json["created_date"],
     isBookmark: json["is_bookmark"],
+    type: json["type"],
+    advimage: json["advimage"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -98,6 +104,8 @@ class Datum {
     "news_date": newsDate,
     "created_date": createdDate,
     "is_bookmark": isBookmark,
+    "type": type,
+    "advimage": advimage,
   };
 }
 

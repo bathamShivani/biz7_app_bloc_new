@@ -379,7 +379,8 @@ class _HomePageState extends AppScreenState<HomePage> {
   @override
   void onBackResult(Object? bundle) {
     _cubit
-      ..fetchMyCategories();
+      ..fetchMyCategories()
+    ..fetchnews(0);
 
     super.onBackResult(bundle);
   }
