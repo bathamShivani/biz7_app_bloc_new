@@ -9,6 +9,7 @@ import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/Login.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/model/User.dart';
+import 'package:biz_app_bloc/model/VersionModel.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 
@@ -33,6 +34,7 @@ class ApiEndPoints {
   static final String updateProfilePic = 'api-update-profile-pic';
   static final String advertisemnetUrl = 'api-get-all-advertisement';
   static final String update_device_id =  'api-update-device-id';
+  static final String update_app =  'api-get-version';
 
 }
 
@@ -47,6 +49,7 @@ abstract class ApiHelper {
   Future<Either<CustomException, User>> updateProfilePic(int user_id, path);
   Future<Either<CustomException, String>>executeFcm(int user_id, String token);
   Future<Either<CustomException, AdvertismentModel>>executeAdvertisement();
+  Future<Either<CustomException, VersionModel>>executeAppVersion();
 
 }
 
@@ -230,6 +233,24 @@ class ApiHelperImpl extends ApiHelper {
       await _api.get( ApiEndPoints.advertisemnetUrl,);
       if(response["error"]==false){
         return Right(AdvertismentModel.fromJson(response));
+      }
+      return Left(throw CustomException(300,response["msg"],'rr'));
+    } on CustomException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either<CustomException, VersionModel>> executeAppVersion() async {
+    try {
+      final response =
+      await _api.post( ApiEndPoints.update_app, {
+
+      "app_type":0
+
+      });
+      if(response["error"]==false){
+        return Right(VersionModel.fromJson(response));
       }
       return Left(throw CustomException(300,response["msg"],'rr'));
     } on CustomException catch (e) {

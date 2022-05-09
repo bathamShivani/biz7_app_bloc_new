@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:biz_app_bloc/app/app.dart';
-import 'package:biz_app_bloc/feature/login/login_page.dart';
 import 'package:biz_app_bloc/utility/service/flutter_local_notification.dart';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_core/firebase_core.dart';

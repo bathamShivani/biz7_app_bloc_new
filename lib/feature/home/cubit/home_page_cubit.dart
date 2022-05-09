@@ -1,12 +1,17 @@
+import 'dart:io';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:biz_app_bloc/data/data_helper.dart';
+import 'package:biz_app_bloc/model/Advertisement.dart';
 import 'package:biz_app_bloc/model/Category.dart';
 import 'package:biz_app_bloc/model/News.dart';
 import 'package:biz_app_bloc/model/User.dart' as info;
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:launch_review/launch_review.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../../model/Advertisement.dart';
 part 'HomePageState.dart';
 
 class HomePageCubit extends Cubit<HomePageState> {
@@ -218,6 +223,71 @@ class HomePageCubit extends Cubit<HomePageState> {
         );
       }
     });
+  }
+  Future<void> getAppVersion(BuildContext context) async {
+    final response = await _dataHelper.apiHelper.executeAppVersion();
+
+    response.fold((l) async {
+      emit(state.copyWith(
+        isgetVersionfailed: true,
+        errorMessage: l.errorMessage,
+        isgetVersionsuccess: false,
+      ));
+      emit(state.copyWith(
+        isgetVersionfailed: false,
+      ));
+    }, (r) async {
+        emit(state.copyWith(
+          version_code: r.data.versionCode,
+          force_update: r.data.forceUpdate,
+
+        ));
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        int s = int.parse(packageInfo.buildNumber);
+        print(s);
+        if(state.force_update==1){
+          versionshowAlertDialogOnOkCallback(
+            true,
+            "Update available",
+            context,
+            r.msg,
+          );
+        }
+        else if (state.version_code != s) {
+
+          versionshowAlertDialogOnOkCallback(
+            false,
+            "Update available",
+            context,
+            r.msg,
+          );
+        }
+    });
+  }
+  void versionshowAlertDialogOnOkCallback(
+      bool isupdate,
+      String title,
+      context,
+      String msg,
+      ) {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.INFO,
+        headerAnimationLoop: false,
+        animType: AnimType.TOPSLIDE,
+        dismissOnTouchOutside: !isupdate,
+        title: title,
+        desc: msg,
+        btnCancelOnPress: () {
+          if (isupdate) {
+            exit(0);
+          }
+        },
+        btnOkOnPress: () {
+          LaunchReview.launch(
+              androidAppId: "com.biz_app.biz_app", iOSAppId: "585027354",
+          writeReview: false);
+        }).show();
   }
 
 }

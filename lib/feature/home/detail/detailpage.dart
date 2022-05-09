@@ -78,7 +78,7 @@ class _DetailPageState extends AppScreenState<DetailPage> {
       setState(() {
         downloading = false;
         downloadingStr = "Completed";
-        Share.shareFiles([savePath], text:description+"\n https://play.google.com/store/apps/details?id=com.biz_app.biz_app" ,subject: 'image');
+        Share.shareFiles([savePath], text:description+"\n https://bit.ly/3vRGxrw" ,subject: 'image');
       });
       print(""+"Completed"+downloadingStr);
     } catch (e) {

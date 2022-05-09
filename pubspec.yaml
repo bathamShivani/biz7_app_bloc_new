@@ -63,6 +63,9 @@ dependencies:
   path_provider: ^2.0.9
   path: ^1.8.0
   dio: ^4.0.4
+  package_info_plus: ^1.4.2
+  awesome_dialog: ^2.2.1
+  launch_review: ^3.0.1
 
 
 

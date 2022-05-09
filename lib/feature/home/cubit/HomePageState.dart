@@ -19,6 +19,10 @@ class HomePageState extends Equatable {
   final bool isAdverFailure;
   final bool isAdverLoading;
   List<AdvertismentList> adverlist;
+  int force_update;
+  int version_code;
+  final bool isgetVersionfailed;
+  final bool isgetVersionsuccess;
   HomePageState({
     required this.category,
     required this.news,
@@ -34,6 +38,9 @@ class HomePageState extends Equatable {
     this.isAdverFailure = false,
     this.isAdverLoading = true,
     required this.adverlist,
+    this.version_code=0,this.force_update=0,
+    this.isgetVersionfailed=false,
+    this.isgetVersionsuccess=true,
   });
   @override
   List<Object> get props {
@@ -42,7 +49,8 @@ class HomePageState extends Equatable {
       isCategoryFailure,
       isCategoryLoading,
       errorMessage,
-      news,isNewsLoading,isNewsFailure,page,searchText,  isReloading,selectedCatId,isAdverFailure,isAdverLoading,adverlist
+      news,isNewsLoading,isNewsFailure,page,searchText,  isReloading,selectedCatId,isAdverFailure,isAdverLoading,adverlist,version_code,force_update,
+      isgetVersionsuccess,isgetVersionfailed
 
     ];
   }
@@ -62,6 +70,10 @@ class HomePageState extends Equatable {
         bool? isAdverFailure,
         bool? isAdverLoading,
         List<AdvertismentList>? adverlist,
+        int? version_code,
+        int? force_update,
+        bool? isgetVersionsuccess,
+        bool? isgetVersionfailed,
        }) {
     return HomePageState(
         category: category ?? this.category,
@@ -78,6 +90,10 @@ class HomePageState extends Equatable {
       isAdverFailure: isAdverFailure??this.isAdverFailure,
       isAdverLoading: isAdverLoading??this.isAdverLoading,
       adverlist: adverlist??this.adverlist,
+      version_code: version_code??this.version_code,
+      force_update: force_update??this.force_update,
+      isgetVersionsuccess: isgetVersionsuccess??this.isgetVersionsuccess,
+      isgetVersionfailed: isgetVersionfailed??this.isgetVersionfailed,
     );
   }
 
